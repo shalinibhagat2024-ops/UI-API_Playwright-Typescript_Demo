@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
 
-import { CheckboxShowcasePage } from "../../src/pages/showcase/CheckBoxShowcasePage";
+import { CheckboxShowcasePage } from "../../../src/pages/showcase/CheckBoxShowcasePage";
 
 test.describe("Checkbox Component Showcase", () => {
   test(

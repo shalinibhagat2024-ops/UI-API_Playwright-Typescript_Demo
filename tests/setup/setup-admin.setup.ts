@@ -1,17 +1,19 @@
 import { expect, test as setup } from "@playwright/test";
-import { EnvironmentManager } from "src/core/config/EnvironmentManager";
+import { LoginPage } from "src/pages/AutomationExercise/authorization/LoginPage";
 
 setup("Authenticate", async ({ page }) => {
-  await page.goto(EnvironmentManager.getBaseUrl());
+  const loginPage = new LoginPage(page);
 
-  await page.locator("a[href='/login']").click();
-  await page.locator("[data-qa='login-email']").fill(EnvironmentManager.getAdminUsername());
-  await page.locator("[data-qa='login-password']").fill(EnvironmentManager.getAdminPassword());
-  await page.locator("[data-qa='login-button']").click();
+  // Open Login Page
+  await loginPage.open();
+
+  // Login as Admin
+  await loginPage.loginAsAdmin();
 
   // Verify login succeeded
   await expect(page).toHaveURL(/.*\/$/);
 
+  // Save authenticated session
   await page.context().storageState({
     path: "playwright/.auth/AdminUser.json",
   });

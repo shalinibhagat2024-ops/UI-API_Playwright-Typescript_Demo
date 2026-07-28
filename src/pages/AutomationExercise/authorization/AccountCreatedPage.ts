@@ -15,7 +15,7 @@ export class AccountCreatedPage extends BasePage {
   /**
    * Verify Account Created
    */
-  public async verifyCreated(): Promise<void> {
+  public async verifyNewAccountCreated(): Promise<void> {
     await this.assertions.containsText(this.lblAccountCreatedSuccessMessage, "Account Created!");
   }
 

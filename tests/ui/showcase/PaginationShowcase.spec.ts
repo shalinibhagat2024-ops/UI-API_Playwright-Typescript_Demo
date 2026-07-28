@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { PaginationShowcasePage } from "../../src/pages/showcase/PaginationShowcasePage";
+import { PaginationShowcasePage } from "../../../src/pages/showcase/PaginationShowcasePage";
 
 test.describe("Pagination Component Showcase", () => {
   test(

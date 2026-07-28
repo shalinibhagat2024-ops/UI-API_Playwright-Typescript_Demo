@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
 
-import { CalendarShowcasePage } from "../../src/pages/showcase/CalendarShowcasePage";
+import { CalendarShowcasePage } from "../../../src/pages/showcase/CalendarShowcasePage";
 
 test.describe("Calendar Component", () => {
   test(

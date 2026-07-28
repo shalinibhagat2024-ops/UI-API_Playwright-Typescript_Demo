@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
 
-import { TextBoxShowcasePage } from "../../src/pages/showcase/TextBoxShowcasePage";
+import { TextBoxShowcasePage } from "../../../src/pages/showcase/TextBoxShowcasePage";
 
 test.describe("TextBox Component", () => {
   test("Verify user can enter text", async ({ page }) => {

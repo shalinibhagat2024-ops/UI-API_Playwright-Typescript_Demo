@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
 
-import { RadioButtonShowcasePage } from "../../src/pages/showcase/RadioButtonShowcasePage";
+import { RadioButtonShowcasePage } from "../../../src/pages/showcase/RadioButtonShowcasePage";
 
 test.describe("Radio Button Component Showcase", () => {
   test(

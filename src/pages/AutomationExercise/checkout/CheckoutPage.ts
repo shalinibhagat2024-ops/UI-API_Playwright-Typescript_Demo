@@ -20,7 +20,7 @@ export class CheckoutPage extends BasePage {
   /**
    * Verify Checkout Page
    */
-  public async verifyOpened(): Promise<void> {
+  public async verifyOpened() {
     Logger.info("Verifying Checkout Page");
     await this.assertions.visible(this.lblAddressDetails);
     await this.assertions.visible(this.lblReviewOrder);

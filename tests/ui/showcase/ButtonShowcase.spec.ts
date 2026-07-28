@@ -1,6 +1,6 @@
 import { test } from "@playwright/test";
 
-import { ButtonShowcasePage } from "../../src/pages/showcase/ButtonShowcasePage";
+import { ButtonShowcasePage } from "../../../src/pages/showcase/ButtonShowcasePage";
 
 test.describe("Button Component Showcase", () => {
   test("Verify all button actions", async ({ page }) => {

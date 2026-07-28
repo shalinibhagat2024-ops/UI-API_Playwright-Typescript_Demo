@@ -88,7 +88,5 @@ export class SignupInformationPage extends BasePage {
     await this.ui.textbox(this.txtMobile).enter(user.mobileNumber!);
 
     await this.ui.button(this.btnCreateAccount).click();
-
-    //await this.waits.networkIdle();
   }
 }

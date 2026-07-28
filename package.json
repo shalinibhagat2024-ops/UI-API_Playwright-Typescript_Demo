@@ -15,6 +15,11 @@
   },
   "scripts": {
     "test": "playwright test",
+    "test:qa": "cross-env ENV=qa playwright test",
+    "test:dev": "cross-env ENV=dev playwright test",
+    "test:prod": "cross-env ENV=prod playwright test",
+    "test:qa:chrome": "cross-env ENV=qa BROWSER=chromium playwright test",
+    "test:dev:chrome": "cross-env ENV=dev BROWSER=chromium playwright test",
     "test:ui": "playwright test --project=ui",
     "test:api": "playwright test --project=api",
     "test:setup": "playwright test --project=setup-admin",

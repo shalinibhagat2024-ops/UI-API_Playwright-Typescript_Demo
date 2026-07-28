@@ -1,6 +1,8 @@
 import { EnvironmentManager } from "@core/config/EnvironmentManager";
 import { defineConfig, devices } from "@playwright/test";
 
+EnvironmentManager.initialize();
+
 const execution = EnvironmentManager.getExecutionConfig();
 const browser = EnvironmentManager.getBrowserConfig();
 const reporting = EnvironmentManager.getReportingConfig();
@@ -66,10 +68,9 @@ export default defineConfig({
 
     screenshot: reporting.screenshot as "off" | "on" | "only-on-failure",
 
-    video: reporting.video as "off" | "on" | "retain-on-failure" | "retry-with-video",
+    video: reporting.video as "off" | "on" | "retain-on-failure",
 
-    trace: reporting.trace as
-      "off" | "on" | "on-first-retry" | "retain-on-failure" | "retry-with-trace",
+    trace: reporting.trace as "off" | "on" | "retain-on-failure" | "on-first-retry",
 
     actionTimeout: 15000,
 
@@ -87,6 +88,9 @@ export default defineConfig({
     {
       name: "setup-admin",
       testMatch: "tests/setup/setup-admin.setup.ts",
+      use: {
+        ...devices["Desktop Firefox"],
+      },
     },
     {
       name: "ui",

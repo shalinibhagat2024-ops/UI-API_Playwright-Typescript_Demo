@@ -3,19 +3,19 @@ import fs from "fs";
 import path from "path";
 
 export class JsonConfigLoader {
-  public static load(): Environment {
-    const environment = process.env.ENV ?? "qa";
-
-    const profile = process.env.CI ? `${environment}-ci` : environment;
-
+  public static load(profile: string): Environment {
     const filePath = path.resolve(
       process.cwd(),
       "src",
       "resources",
-      "envirornment",
+      "environment",
       `${profile}.json`
     );
 
-    return JSON.parse(fs.readFileSync(filePath, "utf-8")) as Environment;
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Environment file not found: ${filePath}`);
+    }
+
+    return JSON.parse(fs.readFileSync(filePath, "utf8")) as Environment;
   }
 }

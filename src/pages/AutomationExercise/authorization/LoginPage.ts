@@ -39,7 +39,10 @@ export class LoginPage extends BasePage {
   }
 
   public async loginAsAdmin(): Promise<void> {
-    await this.login(EnvironmentManager.getAdminUsername(), EnvironmentManager.getAdminPassword());
+    await this.login(
+      EnvironmentManager.getAdminUser().username,
+      EnvironmentManager.getAdminUser().password
+    );
   }
 
   /**

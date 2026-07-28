@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { DropdownShowcasePage } from "../../src/pages/showcase/DropdownShowcasePage";
+import { DropdownShowcasePage } from "../../../src/pages/showcase/DropdownShowcasePage";
 
 test.describe("Dropdown Component", () => {
   test(
