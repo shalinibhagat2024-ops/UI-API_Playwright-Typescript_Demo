@@ -9,7 +9,7 @@ echo "      Playwright UI Automation Execution"
 echo "====================================================="
 
 echo "Environment : ${ENV:-qa}"
-echo "Browser     : ${BROWSER:-chromium}"
+echo "Project     : ${PROJECT:-chromium}"
 echo "Suite       : ${SUITE:-all}"
 echo "Shard       : ${SHARD:-none}"
 echo "Runner      : $(uname -a)"
@@ -22,11 +22,11 @@ echo "====================================================="
 # Validate Browser
 #########################################################
 
-case "${BROWSER:-chromium}" in
-  chromium|firefox|webkit|ui)
+case "${PROJECT:-chromium}" in
+  chromium|firefox|webkit|ui|chromium-anonymous|api)
     ;;
   *)
-    echo "Invalid browser: ${BROWSER}"
+    echo "Invalid project: ${PROJECT}"
     exit 1
     ;;
 esac
@@ -58,8 +58,8 @@ COMMAND=(
 # Browser / Project
 #########################################################
 
-if [[ -n "${BROWSER:-}" ]]; then
-  COMMAND+=("--project=${BROWSER}")
+if [[ -n "${PROJECT:-}" ]]; then
+    COMMAND+=("--project=${PROJECT}")
 fi
 
 #########################################################

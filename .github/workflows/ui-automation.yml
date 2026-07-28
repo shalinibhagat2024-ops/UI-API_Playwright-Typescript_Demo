@@ -18,8 +18,8 @@ on:
           - dev
           - prod
 
-      browser:
-        description: Browser
+      project:
+        description: Playwright Project
         type: choice
         required: true
         default: chromium
@@ -27,6 +27,9 @@ on:
           - chromium
           - firefox
           - webkit
+          - ui
+          - chromium-anonymous
+          - api
 
       suite:
         description: Test Suite
@@ -53,22 +56,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            shard: "1/3"
+          - shard: "1/3"
             artifactName: shard-1
 
-          - os: ubuntu-latest
-            shard: "2/3"
+          - shard: "2/3"
             artifactName: shard-2
 
-          - os: ubuntu-latest
-            shard: "3/3"
+          - shard: "3/3"
             artifactName: shard-3
 
     env:
-      CI: true
       ENV: ${{ github.event.inputs.environment }}
-      BROWSER: ${{ github.event.inputs.browser }}
+      PROJECT: ${{ github.event.inputs.project }}
       SUITE: ${{ github.event.inputs.suite }}
       SHARD: ${{ matrix.shard }}
 
@@ -76,7 +75,7 @@ jobs:
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
 
     steps:
-      # Checkout Repository
+      # Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -87,47 +86,27 @@ jobs:
           node-version: "22"
           cache: npm
 
-      # Cache Playwright Browsers
-      - name: Cache Playwright Browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
-
-      # Install Dependencies
+      # Install project dependencies
       - name: Install Dependencies
         run: npm ci
 
-      # Clean Reports
-      - name: Clean Reports
-        run: npm run report:clean
-
-      # Install Playwright Browsers
+      # Install Playwright browsers
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      # Type Check
-      - name: Type Check
-        run: npm run type-check
-
-      - name: Lint
-        run: npm run lint
-
-      # Generate Authentication
+      # Generate authentication state
       - name: Generate Authentication
         run: npm run test:setup
 
-      # Make Execute Script Executable
+      # Make execution script executable
       - name: Make Execute Script Executable
         run: chmod +x .github/scripts/execute-ui.sh
 
-      # Execute UI Tests
+      # Execute UI tests
       - name: Execute UI Tests
         run: .github/scripts/execute-ui.sh
 
-      # Upload Playwright Report
+      # Upload Playwright HTML Report
       - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -147,17 +126,7 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
-      # Upload JSON Report
-      - name: Upload JSON Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: json-report-${{ matrix.artifactName }}
-          path: test-results/results.json
-          retention-days: 7
-          if-no-files-found: warn
-
-      # Upload Failed Test Results
+      # Upload failed test artifacts
       - name: Upload Failed Test Results
         if: failure()
         uses: actions/upload-artifact@v4
@@ -166,16 +135,6 @@ jobs:
           path: test-results
           retention-days: 7
           if-no-files-found: warn
-
-      # Upload Trace Files
-      - name: Upload Trace Files
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: traces-${{ matrix.artifactName }}
-          path: test-results
-          retention-days: 7
-          if-no-files-found: ignore
 
   publish-allure:
     name: Publish Allure Report
@@ -190,7 +149,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      # Download Allure Results
+      # Download merged Allure results
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
@@ -198,7 +157,7 @@ jobs:
           merge-multiple: true
           path: allure-results
 
-      # Restore Previous Report
+      # Restore previous report (for trend history)
       - name: Restore Previous Report
         run: |
           mkdir -p previous-report
@@ -209,7 +168,7 @@ jobs:
             "https://shalinibhagat2024-ops.github.io/UI-API_Playwright-Typescript-Framework_Design/" \
             -P previous-report || true
 
-      # Restore History
+      # Restore Allure history
       - name: Restore History
         run: |
           mkdir -p allure-results/history
@@ -241,17 +200,17 @@ jobs:
             --clean \
             --output allure-report
 
-      # Setup GitHub Pages
+      # Configure GitHub Pages
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      # Upload GitHub Pages Artifact
+      # Upload GitHub Pages artifact
       - name: Upload GitHub Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: allure-report
 
-      # Deploy to GitHub Pages
+      # Deploy Allure Report
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
