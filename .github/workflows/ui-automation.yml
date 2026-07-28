@@ -18,8 +18,8 @@ on:
           - dev
           - prod
 
-      project:
-        description: Playwright Project
+      browser:
+        description: Browser
         type: choice
         required: true
         default: chromium
@@ -27,9 +27,6 @@ on:
           - chromium
           - firefox
           - webkit
-          - ui
-          - chromium-anonymous
-          - api
 
       suite:
         description: Test Suite
@@ -67,7 +64,7 @@ jobs:
 
     env:
       ENV: ${{ github.event.inputs.environment }}
-      PROJECT: ${{ github.event.inputs.project }}
+      BROWSER: ${{ github.event.inputs.browser }}
       SUITE: ${{ github.event.inputs.suite }}
       SHARD: ${{ matrix.shard }}
 
