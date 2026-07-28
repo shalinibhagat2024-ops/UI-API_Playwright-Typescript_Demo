@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -Eeuo pipefail
+
+START_TIME=$(date +%s)
 
 echo "====================================================="
 echo "      Playwright UI Automation Execution"
@@ -10,17 +12,54 @@ echo "Environment : ${ENV:-qa}"
 echo "Browser     : ${BROWSER:-chromium}"
 echo "Suite       : ${SUITE:-all}"
 echo "Shard       : ${SHARD:-none}"
+echo "Runner      : $(uname -a)"
+echo "Node        : $(node --version)"
+echo "NPM         : $(npm --version)"
+echo "Playwright  : $(npx playwright --version)"
 echo "====================================================="
 
-# Build Playwright command
-COMMAND=("npx" "playwright" "test")
+#########################################################
+# Validate Browser
+#########################################################
+
+case "${BROWSER:-chromium}" in
+  chromium|firefox|webkit|ui)
+    ;;
+  *)
+    echo "Invalid browser: ${BROWSER}"
+    exit 1
+    ;;
+esac
 
 #########################################################
-# Browser
+# Validate Suite
+#########################################################
+
+case "${SUITE:-all}" in
+  smoke|sanity|regression|all)
+    ;;
+  *)
+    echo "Invalid suite: ${SUITE}"
+    exit 1
+    ;;
+esac
+
+#########################################################
+# Build Playwright Command
+#########################################################
+
+COMMAND=(
+  npx
+  playwright
+  test
+)
+
+#########################################################
+# Browser / Project
 #########################################################
 
 if [[ -n "${BROWSER:-}" ]]; then
-    COMMAND+=("--project=${BROWSER}")
+  COMMAND+=("--project=${BROWSER}")
 fi
 
 #########################################################
@@ -28,7 +67,7 @@ fi
 #########################################################
 
 if [[ "${SUITE:-all}" != "all" ]]; then
-    COMMAND+=("--grep" "@${SUITE}")
+  COMMAND+=("--grep=@${SUITE}")
 fi
 
 #########################################################
@@ -36,18 +75,20 @@ fi
 #########################################################
 
 if [[ -n "${SHARD:-}" ]]; then
-    COMMAND+=("--shard=${SHARD}")
+  COMMAND+=("--shard=${SHARD}")
 fi
 
 #########################################################
 # Display Command
 #########################################################
 
-echo ""
-echo "Executing Command:"
+echo
+echo "Executing Command"
+echo "-----------------------------------------------------"
 printf '%q ' "${COMMAND[@]}"
-echo ""
-echo ""
+echo
+echo "-----------------------------------------------------"
+echo
 
 #########################################################
 # Execute
@@ -56,10 +97,14 @@ echo ""
 "${COMMAND[@]}"
 
 #########################################################
-# Completed
+# Finish
 #########################################################
 
-echo ""
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
+echo
 echo "====================================================="
 echo "UI Automation Execution Completed Successfully"
+echo "Execution Time : ${DURATION} seconds"
 echo "====================================================="

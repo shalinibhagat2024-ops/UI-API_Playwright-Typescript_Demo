@@ -14,9 +14,10 @@
     ]
   },
   "scripts": {
-    "auth:admin": "playwright test --project=setup-admin",
-    "ui": "playwright test --project=ui",
-    "api": "playwright test --project=api",
+    "test": "playwright test",
+    "test:ui": "playwright test --project=ui",
+    "test:api": "playwright test --project=api",
+    "test:setup": "playwright test --project=setup-admin",
     "report:clean": "rimraf allure-results allure-report",
     "report:generate": "allure generate allure-results --clean -o allure-report",
     "report:open": "allure open allure-report",

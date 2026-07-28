@@ -54,17 +54,19 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-          - shard: "1/3"
-            browser: chromium
+            shard: "1/3"
             artifactName: shard-1
 
-          - shard: "2/3"
+          - os: ubuntu-latest
+            shard: "2/3"
             artifactName: shard-2
 
-          - shard: "3/3"
+          - os: ubuntu-latest
+            shard: "3/3"
             artifactName: shard-3
 
     env:
+      CI: true
       ENV: ${{ github.event.inputs.environment }}
       BROWSER: ${{ github.event.inputs.browser }}
       SUITE: ${{ github.event.inputs.suite }}
@@ -74,7 +76,7 @@ jobs:
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
 
     steps:
-      # Checkout repository
+      # Checkout Repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -85,27 +87,47 @@ jobs:
           node-version: "22"
           cache: npm
 
-      # Install project dependencies
+      # Cache Playwright Browsers
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      # Install Dependencies
       - name: Install Dependencies
         run: npm ci
 
-      # Install Playwright browsers
+      # Clean Reports
+      - name: Clean Reports
+        run: npm run report:clean
+
+      # Install Playwright Browsers
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      # Generate authentication state
-      - name: Generate Authentication
-        run: npm run auth:admin
+      # Type Check
+      - name: Type Check
+        run: npm run type-check
 
-      # Make execution script executable
+      - name: Lint
+        run: npm run lint
+
+      # Generate Authentication
+      - name: Generate Authentication
+        run: npm run test:setup
+
+      # Make Execute Script Executable
       - name: Make Execute Script Executable
         run: chmod +x .github/scripts/execute-ui.sh
 
-      # Execute UI tests
+      # Execute UI Tests
       - name: Execute UI Tests
         run: .github/scripts/execute-ui.sh
 
-      # Upload Playwright HTML Report
+      # Upload Playwright Report
       - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -125,7 +147,17 @@ jobs:
           retention-days: 7
           if-no-files-found: warn
 
-      # Upload failed test artifacts
+      # Upload JSON Report
+      - name: Upload JSON Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: json-report-${{ matrix.artifactName }}
+          path: test-results/results.json
+          retention-days: 7
+          if-no-files-found: warn
+
+      # Upload Failed Test Results
       - name: Upload Failed Test Results
         if: failure()
         uses: actions/upload-artifact@v4
@@ -134,6 +166,16 @@ jobs:
           path: test-results
           retention-days: 7
           if-no-files-found: warn
+
+      # Upload Trace Files
+      - name: Upload Trace Files
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: traces-${{ matrix.artifactName }}
+          path: test-results
+          retention-days: 7
+          if-no-files-found: ignore
 
   publish-allure:
     name: Publish Allure Report
@@ -148,7 +190,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      # Download merged Allure results
+      # Download Allure Results
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
@@ -156,7 +198,7 @@ jobs:
           merge-multiple: true
           path: allure-results
 
-      # Restore previous report (for trend history)
+      # Restore Previous Report
       - name: Restore Previous Report
         run: |
           mkdir -p previous-report
@@ -167,7 +209,7 @@ jobs:
             "https://shalinibhagat2024-ops.github.io/UI-API_Playwright-Typescript-Framework_Design/" \
             -P previous-report || true
 
-      # Restore Allure history
+      # Restore History
       - name: Restore History
         run: |
           mkdir -p allure-results/history
@@ -199,17 +241,17 @@ jobs:
             --clean \
             --output allure-report
 
-      # Configure GitHub Pages
+      # Setup GitHub Pages
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
-      # Upload GitHub Pages artifact
+      # Upload GitHub Pages Artifact
       - name: Upload GitHub Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: allure-report
 
-      # Deploy Allure Report
+      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
