@@ -4,10 +4,12 @@
   "apiBaseUrl": "https://dummyjson.com",
   "applicationName": "Automation Exercise",
   "testDataSource": "json",
+
   "browser": {
     "name": "chromium",
     "headless": false,
-    "slowMo": 0
+    "slowMo": 0,
+    "maximize": true
   },
   "execution": {
     "workers": 4,

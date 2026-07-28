@@ -1,12 +1,16 @@
 import { ButtonComponent } from "@core/helpers/components/ButtonComponent";
 import { CalendarComponent } from "@core/helpers/components/CalendarComponent";
+import { CardComponent } from "@core/helpers/components/CardComponent";
 import { CheckboxComponent } from "@core/helpers/components/CheckboxComponent";
+import { DragDropComponent } from "@core/helpers/components/DragDropComponent";
 import { DropdownComponent } from "@core/helpers/components/DropdownComponent";
 import { FileUploadComponent } from "@core/helpers/components/FileUploadComponent";
 import { GridComponent } from "@core/helpers/components/GridComponent";
 import { ModalComponent } from "@core/helpers/components/ModalComponent";
 import { PaginationComponent } from "@core/helpers/components/PaginationComponent";
+import { ProgressBarComponent } from "@core/helpers/components/ProgressBarComponent";
 import { RadioButtonComponent } from "@core/helpers/components/RadioButtonComponent";
+import { SpinnerComponent } from "@core/helpers/components/SpinnerComponent";
 import { TableComponent } from "@core/helpers/components/TableComponent";
 import { TextBoxComponent } from "@core/helpers/components/TextBoxComponent";
 import { ToastComponent } from "@core/helpers/components/ToastComponent";
@@ -99,45 +103,25 @@ export class UIManager {
     return new ToastComponent(this.page, locator);
   }
 
-  // /**
-  //  * Tooltip
-  //  */
-  // public tooltip(locator: Locator): TooltipComponent {
-  //   return new TooltipComponent(this.page, locator);
-  // }
+  public spinner(locator: Locator): SpinnerComponent {
+    return new SpinnerComponent(this.page, locator);
+  }
 
-  // /**
-  //  * Tabs
-  //  */
-  // public tabs(locator: Locator): TabsComponent {
-  //   return new TabsComponent(this.page, locator);
-  // }
+  public progressBar(locator: Locator): ProgressBarComponent {
+    return new ProgressBarComponent(this.page, locator);
+  }
 
-  // /**
-  //  * Tree
-  //  */
-  // public tree(locator: Locator): TreeComponent {
-  //   return new TreeComponent(this.page, locator);
-  // }
+  /**
+   * Drag & Drop
+   */
+  public dragDrop(locator: Locator): DragDropComponent {
+    return new DragDropComponent(this.page, locator);
+  }
 
-  // /**
-  //  * Slider
-  //  */
-  // public slider(locator: Locator): SliderComponent {
-  //   return new SliderComponent(this.page, locator);
-  // }
-
-  // /**
-  //  * Progress Bar
-  //  */
-  // public progressBar(locator: Locator): ProgressBarComponent {
-  //   return new ProgressBarComponent(this.page, locator);
-  // }
-
-  // /**
-  //  * Rich Text Editor
-  //  */
-  // public richTextEditor(locator: Locator): RichTextEditorComponent {
-  //   return new RichTextEditorComponent(this.page, locator);
-  // }
+  /**
+   * Card Component
+   */
+  public card(locator: Locator): CardComponent {
+    return new CardComponent(this.page, locator);
+  }
 }

@@ -6,23 +6,46 @@ export class PaginationComponent extends BaseComponent {
     super(page, locator);
   }
 
-  async next(): Promise<void> {
-    await this.page.getByLabel("Next").click();
+  /**
+   * Wait until pagination is visible.
+   */
+  async waitUntilVisible(): Promise<void> {
+    await this.waits.visible(this.locator);
   }
 
-  async previous(): Promise<void> {
-    await this.page.getByLabel("Previous").click();
+  /**
+   * Click the Next button.
+   *
+   * @param nextButton Locator for the Next button.
+   */
+  async next(nextButton: Locator): Promise<void> {
+    await this.actions.click(nextButton);
   }
 
-  async pagination(): Promise<void> {
-    await this.locator.waitFor({ state: "visible" });
+  /**
+   * Click the Previous button.
+   *
+   * @param previousButton Locator for the Previous button.
+   */
+  async previous(previousButton: Locator): Promise<void> {
+    await this.actions.click(previousButton);
   }
 
-  // Property 'hasPage' does not exist on type '() => Promise<void>'. ts(2339)
-  // TODO: Investigate the cause instead of using 'any'.
+  /**
+   * Navigate to a specific page.
+   *
+   * @param pageLocator Locator for the page number.
+   */
+  async goToPage(pageLocator: Locator): Promise<void> {
+    await this.actions.click(pageLocator);
+  }
 
-  async hasPage(pageNumber: number): Promise<boolean> {
-    const pageLocator = this.page.locator(`.page-item >> text=${pageNumber}`);
-    return await pageLocator.isVisible();
+  /**
+   * Returns whether a page number is visible.
+   *
+   * @param pageLocator Locator for the page number.
+   */
+  async hasPage(pageLocator: Locator): Promise<boolean> {
+    return await this.actions.isVisible(pageLocator);
   }
 }

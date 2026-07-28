@@ -79,7 +79,9 @@
   "dependencies": {
     "@faker-js/faker": "^10.5.0",
     "ajv": "^8.20.0",
+    "csv-parse": "^7.0.1",
     "csv-parser": "^3.2.1",
+    "csv-stringify": "^6.8.1",
     "dotenv": "^17.4.2",
     "luxon": "^3.7.2",
     "papaparse": "^5.5.4",

@@ -55,4 +55,52 @@ export class DateUtil {
   public static currentTime(): string {
     return new Date().toLocaleTimeString();
   }
+
+  /**
+   * Yesterday
+   */
+  public static yesterday(): Date {
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    return date;
+  }
+
+  /**
+   * Tomorrow
+   */
+  public static tomorrow(): Date {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    return date;
+  }
+
+  /**
+   * Subtract Days
+   */
+  public static subtractDays(days: number): Date {
+    const date = new Date();
+    date.setDate(date.getDate() - days);
+    return date;
+  }
+
+  /**
+   * Current Year
+   */
+  public static currentYear(): number {
+    return new Date().getFullYear();
+  }
+
+  /**
+   * Current Month
+   */
+  public static currentMonth(): number {
+    return new Date().getMonth() + 1;
+  }
+
+  /**
+   * Current Day
+   */
+  public static currentDay(): number {
+    return new Date().getDate();
+  }
 }

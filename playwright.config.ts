@@ -12,6 +12,7 @@ const JSON_REPORT = `${TEST_RESULTS}/results.json`;
 
 export default defineConfig({
   globalSetup: require.resolve("./src/global.setup"),
+  globalTeardown: require.resolve("./src/global.teardown"),
   fullyParallel: false,
 
   forbidOnly: !!process.env.CI,
@@ -85,10 +86,8 @@ export default defineConfig({
   projects: [
     {
       name: "setup-admin",
-      testDir: "./tests/ui/auth",
-      testMatch: "setup-admin.setup.ts",
+      testMatch: "tests/setup/setup-admin.setup.ts",
     },
-
     {
       name: "ui",
       testDir: "./tests/ui",

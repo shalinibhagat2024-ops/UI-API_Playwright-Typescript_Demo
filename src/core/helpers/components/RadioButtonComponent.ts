@@ -7,44 +7,54 @@ export class RadioButtonComponent extends BaseComponent {
   }
 
   /**
-   * Check radio button
+   * Check the radio button.
    */
-  public async check(): Promise<void> {
+  async check(): Promise<void> {
+    await this.select();
+  }
+
+  /**
+   * Select the radio button.
+   */
+  async select(): Promise<void> {
     await this.click();
   }
 
   /**
-   * Select radio button
+   * Select the radio button only if it is not already selected.
    */
-  public async select(): Promise<void> {
-    await this.click();
+  async set(): Promise<void> {
+    if (!(await this.isSelected())) {
+      await this.select();
+    }
   }
 
   /**
-   * Returns selection status
+   * Returns whether the radio button is selected.
    */
-  public async isSelected(): Promise<boolean> {
+  async isSelected(): Promise<boolean> {
     return await this.locator.isChecked();
   }
 
   /**
-   * Verify selected
+   * Verify the radio button is selected.
    */
-  public async verifySelected(): Promise<void> {
+  async verifySelected(): Promise<void> {
     await this.assertions.checked(this.locator);
   }
 
   /**
-   * Verify not selected
+   * Verify the radio button is not selected.
    */
-  public async verifyNotSelected(): Promise<void> {
+  async verifyNotSelected(): Promise<void> {
     await this.assertions.unchecked(this.locator);
   }
 
   /**
-   * Toggle selection
+   * @deprecated Radio buttons cannot be toggled.
+   * Use select() or set() instead.
    */
-  public async toggle(): Promise<void> {
-    await this.click();
+  async toggle(): Promise<void> {
+    await this.select();
   }
 }

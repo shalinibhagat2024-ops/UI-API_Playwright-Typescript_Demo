@@ -1,108 +1,162 @@
 import { expect, Locator, Page } from "@playwright/test";
 
 export class WaitHelper {
+  private static readonly DEFAULT_TIMEOUT = 30_000;
+
   constructor(private readonly page: Page) {}
 
+  // ============================================================================
+  // Element Waits
+  // ============================================================================
+
   /**
-   * Wait until element is visible
+   * Wait until element is visible.
    */
-  async visible(locator: Locator, timeout: number = 30000): Promise<void> {
-    await locator.waitFor({ state: "visible", timeout });
+  async visible(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+    await locator.waitFor({
+      state: "visible",
+      timeout,
+    });
   }
 
   /**
-   * Wait until element is hidden
+   * Backward compatible alias.
    */
-  async hidden(locator: Locator, timeout: number = 30000): Promise<void> {
-    await locator.waitFor({ state: "hidden", timeout });
+  async waitForVisible(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+    await this.visible(locator, timeout);
   }
 
   /**
-   * Wait until attached
+   * Wait until element is hidden.
    */
-  async attached(locator: Locator, timeout: number = 30000): Promise<void> {
-    await locator.waitFor({ state: "attached", timeout });
+  async hidden(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+    await locator.waitFor({
+      state: "hidden",
+      timeout,
+    });
   }
 
   /**
-   * Wait until detached
+   * Backward compatible alias.
    */
-  async detached(locator: Locator, timeout: number = 30000): Promise<void> {
-    await locator.waitFor({ state: "detached", timeout });
+  async waitForHidden(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+    await this.hidden(locator, timeout);
   }
 
   /**
-   * Wait until enabled
+   * Wait until element is attached.
    */
-  async enabled(locator: Locator, timeout: number = 30000): Promise<void> {
-    await expect(locator).toBeEnabled({ timeout });
+  async attached(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+    await locator.waitFor({
+      state: "attached",
+      timeout,
+    });
   }
 
   /**
-   * Wait until disabled
+   * Wait until element is detached.
    */
-  async disabled(locator: Locator, timeout: number = 30000): Promise<void> {
-    await expect(locator).toBeDisabled({ timeout });
+  async detached(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+    await locator.waitFor({
+      state: "detached",
+      timeout,
+    });
   }
 
   /**
-   * Wait for URL
+   * Wait until element is enabled.
    */
-  async urlContains(value: string, timeout: number = 30000): Promise<void> {
-    await this.page.waitForURL(`**${value}**`, { timeout });
+  async enabled(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+    await expect(locator).toBeEnabled({
+      timeout,
+    });
   }
 
   /**
-   * Wait for page load
+   * Wait until element is disabled.
+   */
+  async disabled(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+    await expect(locator).toBeDisabled({
+      timeout,
+    });
+  }
+
+  // ============================================================================
+  // Page Waits
+  // ============================================================================
+
+  /**
+   * Wait for page load.
    */
   async pageLoad(): Promise<void> {
     await this.page.waitForLoadState("load");
   }
 
   /**
-   * Wait for DOM
+   * Backward compatible alias.
+   */
+  async waitForPageLoad(): Promise<void> {
+    await this.pageLoad();
+  }
+
+  /**
+   * Wait until DOM is loaded.
    */
   async domLoaded(): Promise<void> {
     await this.page.waitForLoadState("domcontentloaded");
   }
 
   /**
-   * Wait for Network Idle with a safe fallback
+   * Wait until network becomes idle.
+   * Falls back to 'load' if networkidle is never reached.
    */
-  async networkIdle(timeout: number = 10000): Promise<void> {
+  async networkIdle(timeout = 10_000): Promise<void> {
     try {
-      await this.page.waitForLoadState("networkidle", { timeout });
+      await this.page.waitForLoadState("networkidle", {
+        timeout,
+      });
     } catch {
       await this.page
-        .waitForLoadState("load", { timeout: Math.min(timeout, 5000) })
+        .waitForLoadState("load", {
+          timeout: Math.min(timeout, 5000),
+        })
         .catch(() => undefined);
     }
   }
 
   /**
-   * Small explicit wait
+   * Wait for URL containing the specified value.
    */
-  async sleep(milliseconds: number): Promise<void> {
-    await this.page.waitForTimeout(milliseconds);
-  }
-
-  async waitForPageLoad(): Promise<void> {
-    await this.page.waitForLoadState("networkidle");
-  }
-
-  async waitForVisible(locator: Locator): Promise<void> {
-    await locator.waitFor({
-      state: "visible",
+  async urlContains(value: string, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+    await this.page.waitForURL(`**${value}**`, {
+      timeout,
     });
   }
 
-  async waitForHidden(locator: Locator): Promise<void> {
-    await locator.waitFor({
-      state: "hidden",
+  /**
+   * Wait for exact URL or URL pattern.
+   */
+  async url(url: string | RegExp, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+    await this.page.waitForURL(url, {
+      timeout,
     });
   }
 
+  // ============================================================================
+  // Utility Waits
+  // ============================================================================
+
+  /**
+   * Explicit wait.
+   */
   async wait(milliseconds: number): Promise<void> {
     await this.page.waitForTimeout(milliseconds);
+  }
+
+  /**
+   * Backward compatible alias.
+   */
+  async sleep(milliseconds: number): Promise<void> {
+    await this.wait(milliseconds);
   }
 }

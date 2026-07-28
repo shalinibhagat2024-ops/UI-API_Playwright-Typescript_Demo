@@ -1,32 +1,42 @@
 import { BaseComponent } from "@core/helpers/components/BaseComponent";
-import { expect, Locator, Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 
 export class ToastComponent extends BaseComponent {
+  private static readonly DEFAULT_TIMEOUT = 15_000;
+
   constructor(page: Page, locator: Locator) {
     super(page, locator);
   }
 
   /**
-   * Verify Success Toast
+   * Wait until the toast is visible.
    */
-  public async verifySuccess(message: string): Promise<void> {
-    await expect(this.locator).toContainText(message, {
-      timeout: 15000,
-    });
+  async waitForToast(): Promise<void> {
+    await this.waits.visible(this.locator, ToastComponent.DEFAULT_TIMEOUT);
   }
 
   /**
-   * Verify Error Toast
+   * Verify toast contains text.
    */
-  public async verifyError(message: string): Promise<void> {
-    await expect(this.locator).toContainText(message, {
-      timeout: 15000,
-    });
+  async verifyContains(expected: string | RegExp): Promise<void> {
+    await this.waitForToast();
+
+    await this.assertions.containsText(this.locator, expected);
   }
-  public async waitForToast(): Promise<void> {
-    await this.locator.waitFor({ state: "visible", timeout: 15000 });
+
+  /**
+   * Verify success toast.
+   * Wrapper around verifyContains() for readability.
+   */
+  async verifySuccess(message: string | RegExp): Promise<void> {
+    await this.verifyContains(message);
   }
-  async verifyContains(expectedText: string): Promise<void> {
-    await expect(this.locator).toContainText(expectedText);
+
+  /**
+   * Verify error toast.
+   * Wrapper around verifyContains() for readability.
+   */
+  async verifyError(message: string | RegExp): Promise<void> {
+    await this.verifyContains(message);
   }
 }

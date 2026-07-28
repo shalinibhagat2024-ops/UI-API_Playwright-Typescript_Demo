@@ -7,42 +7,43 @@ export class ButtonComponent extends BaseComponent {
   }
 
   /**
-   * Single Click
+   * Click button.
+   * Supports Playwright click options.
    */
-  async click(): Promise<void> {
-    await super.click();
+  async click(options?: Parameters<Locator["click"]>[0]): Promise<void> {
+    await this.actions.click(this.locator, options);
   }
 
   /**
-   * Double Click
+   * Double click button.
    */
   async doubleClick(): Promise<void> {
     await this.actions.doubleClick(this.locator);
   }
 
   /**
-   * Right Click
+   * Right click button.
    */
   async rightClick(): Promise<void> {
     await this.actions.rightClick(this.locator);
   }
 
   /**
-   * Verify Button Text
+   * Verify button text.
    */
-  async verifyText(expected: string): Promise<void> {
+  async verifyText(expected: string | RegExp): Promise<void> {
     await this.assertions.text(this.locator, expected);
   }
 
   /**
-   * Verify Button Enabled
+   * Verify button is enabled.
    */
   async verifyEnabled(): Promise<void> {
     await this.assertions.enabled(this.locator);
   }
 
   /**
-   * Verify Button Disabled
+   * Verify button is disabled.
    */
   async verifyDisabled(): Promise<void> {
     await this.assertions.disabled(this.locator);

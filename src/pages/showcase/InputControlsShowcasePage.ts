@@ -1,6 +1,4 @@
-import { Page } from "@playwright/test";
 import { ApplicationRoutes } from "src/core/config/ApplicationRoutes";
-import { UIManager } from "src/core/managers/UIManager";
 
 import { BasePage } from "../AutomationExercise/basePage/BasePage";
 

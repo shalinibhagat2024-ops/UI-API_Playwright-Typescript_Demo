@@ -11,34 +11,35 @@ export class AllureEnvironment {
       recursive: true,
     });
 
-    const environment = [
-      `Environment=${EnvironmentManager.getEnvironmentName()}`,
+    const suite = (process.env.SUITE ?? "ui").toLowerCase();
 
-      `Browser=${EnvironmentManager.getBrowserConfig().name}`,
+    const environment: string[] = [];
 
-      `Base_URL=${EnvironmentManager.getBaseUrl()}`,
+    // Common properties
+    environment.push(`Environment=${EnvironmentManager.getEnvironmentName()}`);
+    environment.push(`Execution=${process.env.GITHUB_ACTIONS ? "GitHub Actions" : "Local"}`);
 
-      `API_URL=${EnvironmentManager.getApiBaseUrl()}`,
+    // UI properties
+    if (suite === "ui" || suite === "all") {
+      environment.push(`Browser=${EnvironmentManager.getBrowserConfig().name}`);
+      environment.push(`Base_URL=${EnvironmentManager.getBaseUrl()}`);
+    }
 
-      `Execution=${process.env.GITHUB_ACTIONS ? "GitHub Actions" : "Local"}`,
+    // API properties
+    if (suite === "api" || suite === "all") {
+      environment.push(`API_URL=${EnvironmentManager.getApiBaseUrl()}`);
+    }
 
-      `Branch=${process.env.GITHUB_REF_NAME ?? "Local"}`,
+    // System properties
+    environment.push(`Branch=${process.env.GITHUB_REF_NAME ?? "Local"}`);
+    environment.push(`Commit=${process.env.GITHUB_SHA ?? "N/A"}`);
+    environment.push(`Build=${process.env.GITHUB_RUN_NUMBER ?? "Local"}`);
+    environment.push(`Repository=${process.env.GITHUB_REPOSITORY ?? "Local Repository"}`);
+    environment.push(`OS=${os.type()} ${os.release()}`);
+    environment.push(`Node=${process.version}`);
+    environment.push(`Framework=Playwright + TypeScript Enterprise`);
+    environment.push(`User=${os.userInfo().username}`);
 
-      `Commit=${process.env.GITHUB_SHA ?? "N/A"}`,
-
-      `Build=${process.env.GITHUB_RUN_NUMBER ?? "Local"}`,
-
-      `Repository=${process.env.GITHUB_REPOSITORY ?? "Local Repository"}`,
-
-      `OS=${os.type()} ${os.release()}`,
-
-      `Node=${process.version}`,
-
-      `Framework=Playwright + TypeScript Enterprise`,
-
-      `User=${os.userInfo().username}`,
-    ].join("\n");
-
-    fs.writeFileSync(path.join(outputFolder, "environment.properties"), environment);
+    fs.writeFileSync(path.join(outputFolder, "environment.properties"), environment.join("\n"));
   }
 }

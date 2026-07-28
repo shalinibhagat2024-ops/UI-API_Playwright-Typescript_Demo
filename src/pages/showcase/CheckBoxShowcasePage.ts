@@ -1,5 +1,4 @@
 import { ApplicationRoutes } from "@core/config/ApplicationRoutes";
-import { Page } from "@playwright/test";
 
 import { BasePage } from "../AutomationExercise/basePage/BasePage";
 

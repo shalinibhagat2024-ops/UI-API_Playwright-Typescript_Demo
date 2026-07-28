@@ -7,138 +7,86 @@ export class CalendarComponent extends BaseComponent {
   }
 
   /**
-   * Enter date
+   * Enter date into calendar input.
    */
-  public async enter(date: string): Promise<void> {
+  async enter(date: string): Promise<void> {
     await this.actions.fill(this.locator, date);
   }
 
   /**
-   * Clear date
+   * Type date into calendar input.
    */
-  public async clear(): Promise<void> {
+  async type(date: string): Promise<void> {
+    await this.actions.type(this.locator, date);
+  }
+
+  /**
+   * Clear selected date.
+   */
+  async clear(): Promise<void> {
     await this.actions.clear(this.locator);
   }
 
   /**
-   * Get date value
+   * Open calendar.
    */
-  public async value(): Promise<string> {
-    return await this.locator.inputValue();
+  async open(): Promise<void> {
+    await this.click();
   }
 
   /**
-   * Verify date value
+   * Get selected date.
    */
-  public async verifyValue(expected: string): Promise<void> {
+  async value(): Promise<string> {
+    return await this.getValue();
+  }
+
+  /**
+   * Verify selected date.
+   */
+  async verifyValue(expected: string | RegExp): Promise<void> {
     await this.assertions.value(this.locator, expected);
   }
+
+  /**
+   * Verify calendar is editable.
+   */
+  async verifyEditable(): Promise<void> {
+    await this.assertions.editable(this.locator);
+  }
+
+  /**
+   * Verify calendar is empty.
+   */
+  async verifyEmpty(): Promise<void> {
+    await this.assertions.empty(this.locator);
+  }
+
+  /**
+   * Verify placeholder text.
+   */
+  async verifyPlaceholder(expected: string | RegExp): Promise<void> {
+    await this.assertions.attribute(this.locator, "placeholder", expected);
+  }
+
+  /**
+   * Get placeholder text.
+   */
+  async placeholder(): Promise<string | null> {
+    return await this.actions.getAttribute(this.locator, "placeholder");
+  }
+
+  /**
+   * Check if calendar is readonly.
+   */
+  async isReadOnly(): Promise<boolean> {
+    return (await this.actions.getAttribute(this.locator, "readonly")) !== null;
+  }
+
+  /**
+   * Check if calendar is required.
+   */
+  async isRequired(): Promise<boolean> {
+    return (await this.actions.getAttribute(this.locator, "required")) !== null;
+  }
 }
-
-// import { Locator, Page } from "@playwright/test";
-// import { BaseComponent } from "./BaseComponent";
-
-// export class CalendarComponent extends BaseComponent {
-
-//     constructor(
-//         page: Page,
-//         locator: Locator
-//     ) {
-//         super(page, locator);
-//     }
-
-//     /**
-//      * Set date for native HTML date picker
-//      */
-//     async setDate(date: string): Promise<void> {
-
-//         await this.actions.fill(
-//             this.locator,
-//             date
-//         );
-
-//     }
-
-//     /**
-//      * Click calendar input
-//      */
-//     async open(): Promise<void> {
-
-//         await this.click();
-
-//     }
-
-//     /**
-//      * Select day from opened calendar
-//      */
-//     async selectDay(day: string): Promise<void> {
-
-//         await this.page
-//             .getByText(day, { exact: true })
-//             .click();
-
-//     }
-
-//     /**
-//      * Select month
-//      */
-//     async selectMonth(month: string): Promise<void> {
-
-//         await this.page
-//             .locator(".react-datepicker__month-select")
-//             .selectOption({ label: month });
-
-//     }
-
-//     /**
-//      * Select year
-//      */
-//     async selectYear(year: string): Promise<void> {
-
-//         await this.page
-//             .locator(".react-datepicker__year-select")
-//             .selectOption({ label: year });
-
-//     }
-
-//     /**
-//      * Complete date selection
-//      */
-//     async selectDate(
-//         year: string,
-//         month: string,
-//         day: string
-//     ): Promise<void> {
-
-//         await this.open();
-
-//         await this.selectYear(year);
-
-//         await this.selectMonth(month);
-
-//         await this.selectDay(day);
-
-//     }
-
-//     /**
-//      * Get selected value
-//      */
-//     async value(): Promise<string> {
-
-//         return await this.locator.inputValue();
-
-//     }
-
-//     /**
-//      * Verify selected date
-//      */
-//     async verifyValue(expected: string): Promise<void> {
-
-//         await this.assertions.value(
-//             this.locator,
-//             expected
-//         );
-
-//     }
-
-// }

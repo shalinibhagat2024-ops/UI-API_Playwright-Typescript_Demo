@@ -7,42 +7,55 @@ export class CheckboxComponent extends BaseComponent {
   }
 
   /**
-   * Check checkbox
+   * Check checkbox.
    */
   async check(): Promise<void> {
     await this.actions.check(this.locator);
   }
 
   /**
-   * Uncheck checkbox
+   * Uncheck checkbox.
    */
   async uncheck(): Promise<void> {
     await this.actions.uncheck(this.locator);
   }
 
   /**
-   * Toggle checkbox
+   * Toggle checkbox state.
    */
   async toggle(): Promise<void> {
     await this.click();
   }
 
   /**
-   * Returns checked status
+   * Set checkbox state.
+   *
+   * @param checked true to check, false to uncheck.
+   */
+  async set(checked: boolean): Promise<void> {
+    if (checked) {
+      await this.check();
+    } else {
+      await this.uncheck();
+    }
+  }
+
+  /**
+   * Returns checked state.
    */
   async isChecked(): Promise<boolean> {
     return await this.locator.isChecked();
   }
 
   /**
-   * Verify checked
+   * Verify checkbox is checked.
    */
   async verifyChecked(): Promise<void> {
     await this.assertions.checked(this.locator);
   }
 
   /**
-   * Verify unchecked
+   * Verify checkbox is unchecked.
    */
   async verifyUnchecked(): Promise<void> {
     await this.assertions.unchecked(this.locator);

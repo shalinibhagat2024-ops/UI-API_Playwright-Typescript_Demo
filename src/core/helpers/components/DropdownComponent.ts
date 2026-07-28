@@ -7,162 +7,91 @@ export class DropdownComponent extends BaseComponent {
   }
 
   /**
-   * Native HTML Select - Visible Text
+   * Select native option by visible label.
    */
-  public async selectByLabel(label: string): Promise<void> {
+  async selectByLabel(label: string): Promise<void> {
     await this.waits.visible(this.locator);
     await this.locator.selectOption({ label });
   }
 
   /**
-   * Native HTML Select - Value
+   * Select native option by value.
    */
-  public async selectByValue(value: string): Promise<void> {
-    await this.waits.visible(this.locator);
-    await this.locator.selectOption({ value });
+  async selectByValue(value: string): Promise<void> {
+    await this.actions.selectByValue(this.locator, value);
   }
 
   /**
-   * Native HTML Select - Index
+   * Select native option by index.
    */
-  public async selectByIndex(index: number): Promise<void> {
+  async selectByIndex(index: number): Promise<void> {
     await this.waits.visible(this.locator);
     await this.locator.selectOption({ index });
   }
 
   /**
-   * Custom Dropdown (OrangeHRM, React, Angular)
+   * Select option from a custom dropdown.
    */
-  public async selectCustom(text: string): Promise<void> {
+  async selectCustom(text: string | RegExp): Promise<void> {
     await this.waits.visible(this.locator);
-    await this.locator.click();
-    await this.page.getByText(text, { exact: true }).click();
+
+    await this.click();
+
+    await this.page
+      .getByText(text, {
+        exact: typeof text === "string",
+      })
+      .click();
   }
 
   /**
-   * Selected Text
+   * Returns the selected option text.
+   * Supports both native <select> and custom dropdowns.
    */
-  public async selectedText(): Promise<string> {
+  async selectedText(): Promise<string> {
     return await this.locator.evaluate((element) => {
       if (element instanceof HTMLSelectElement) {
-        return element.options[element.selectedIndex].text;
+        return element.options[element.selectedIndex]?.text.trim() ?? "";
       }
 
-      return element.textContent ?? "";
+      return element.textContent?.trim() ?? "";
     });
   }
+
+  /**
+   * Verify selected option text.
+   */
+  async verifySelectedText(expected: string | RegExp): Promise<void> {
+    const actual = await this.selectedText();
+
+    if (expected instanceof RegExp) {
+      if (!expected.test(actual)) {
+        throw new Error(`Expected selected text to match ${expected}, but found "${actual}".`);
+      }
+    } else if (actual !== expected) {
+      throw new Error(`Expected selected text to be "${expected}", but found "${actual}".`);
+    }
+  }
+
+  /**
+   * Returns all available options.
+   * Works only for native HTML <select>.
+   */
+  async options(): Promise<string[]> {
+    return await this.locator.evaluate((element) => {
+      if (!(element instanceof HTMLSelectElement)) {
+        return [];
+      }
+
+      return Array.from(element.options).map((option) => option.text.trim());
+    });
+  }
+
+  /**
+   * Returns total number of options.
+   * Works only for native HTML <select>.
+   */
+  async count(): Promise<number> {
+    return (await this.options()).length;
+  }
 }
-
-//Native HTML <select> → selectByLabel(), selectByValue(), selectByIndex()
-//Custom UI dropdowns (React, Angular, OrangeHRM) → selectCustom()
-
-// export class DropdownComponent extends BaseComponent {
-
-//     constructor(
-//         page: Page,
-//         locator: Locator
-//     ) {
-//         super(page, locator);
-//     }
-
-//     /**
-//      * Select dropdown value
-//      */
-//     public async select(
-//         value: string
-//     ): Promise<void> {
-
-//         await this.locator.scrollIntoViewIfNeeded();
-
-//         await this.locator.click();
-
-//         const option = this.page
-
-//             .locator(".oxd-select-option")
-
-//             .getByText(value, {
-
-//                 exact: true
-
-//             });
-
-//         await option.waitFor({
-
-//             state: "visible"
-
-//         });
-
-//         await option.click();
-
-//     }
-
-//     /**
-//      * Select First Option
-//      */
-//     public async selectFirst(): Promise<void> {
-
-//         await this.locator.click();
-
-//         await this.page
-
-//             .locator(".oxd-select-option")
-
-//             .first()
-
-//             .click();
-
-//     }
-
-//     /**
-//      * Select Last Option
-//      */
-//     public async selectLast(): Promise<void> {
-
-//         await this.locator.click();
-
-//         await this.page
-
-//             .locator(".oxd-select-option")
-
-//             .last()
-
-//             .click();
-
-//     }
-
-//     /**
-//      * Get Selected Value
-//      */
-//     public async getSelectedValue(): Promise<string> {
-
-//         return (
-
-//             await this.locator.textContent()
-
-//         )?.trim() ?? "";
-
-//     }
-
-//     /**
-//      * Verify Selected Value
-//      */
-//     public async verifySelected(
-//         expected: string
-//     ): Promise<void> {
-
-//         const actual =
-//             await this.getSelectedValue();
-
-//         if (actual !== expected) {
-
-//             throw new Error(
-
-//                 `Expected "${expected}" but found "${actual}".`
-
-//             );
-
-//         }
-
-//     }
-
-// }
