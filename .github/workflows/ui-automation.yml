@@ -91,10 +91,6 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      # Generate authentication state
-      - name: Generate Authentication
-        run: npm run test:setup
-
       # Make execution script executable
       - name: Make Execute Script Executable
         run: chmod +x .github/scripts/execute-ui.sh
