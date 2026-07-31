@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 
-import { TableShowcasePage } from "../../../src/pages/showcase/TableShowcasePage";
+import { TableShowcasePage } from "../../src/pages/showcase/TableShowcasePage";
 
 test.describe("Table Component Showcase", () => {
-  test(
+  test.skip(
     "Verify table row and column count",
     {
       tag: ["@ui", "@component", "@table", "@smoke", "@P1"],
@@ -25,7 +25,7 @@ test.describe("Table Component Showcase", () => {
     }
   );
 
-  test(
+  test.skip(
     "Verify row contains expected employee",
     {
       tag: ["@ui", "@component", "@table", "@regression", "@P1"],

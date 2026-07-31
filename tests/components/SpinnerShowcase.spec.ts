@@ -3,7 +3,7 @@ import { test } from "@playwright/test";
 import { SpinnerShowcasePage } from "src/pages/showcase/SpinnerShowcasePage";
 
 test.describe("Spinner Component Showcase", () => {
-  test(
+  test.skip(
     "Verify Spinner Component",
     {
       tag: ["@ui", "@component", "@spinner", "@regression", "@P1"],

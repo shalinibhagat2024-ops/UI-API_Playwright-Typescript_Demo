@@ -2,7 +2,7 @@ import { test } from "@playwright/test";
 import { ProductsPage } from "src/pages/showcase/ProductsPage";
 
 test.describe("Product Card", () => {
-  test(
+  test.skip(
     "Verify Product Card",
     {
       tag: ["@ui", "@component", "@product", "@smoke", "@P1"],

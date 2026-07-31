@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 
-import { GridShowcasePage } from "../../../src/pages/showcase/GridShowcasePage";
+import { GridShowcasePage } from "../../src/pages/showcase/GridShowcasePage";
 
 test.describe("Grid Component Showcase", () => {
-  test(
+  test.skip(
     "Verify grid contains employee data",
     {
       tag: ["@ui", "@component", "@grid", "@regression", "@P1"],

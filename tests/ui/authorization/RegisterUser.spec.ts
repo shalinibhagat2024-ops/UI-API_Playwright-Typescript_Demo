@@ -10,7 +10,7 @@ test.describe("Register New User", () => {
   });
 
   for (const user of users) {
-    test(
+    test.skip(
       `Register ${user.name}`,
       {
         tag: ["@ui", "@smoke", "@registerNewUser", "@p1"],

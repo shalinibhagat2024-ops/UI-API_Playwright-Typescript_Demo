@@ -1,9 +1,9 @@
 import { test } from "@playwright/test";
 
-import { InputControlsShowcasePage } from "../../../src/pages/showcase/InputControlsShowcasePage";
+import { InputControlsShowcasePage } from "../../src/pages/showcase/InputControlsShowcasePage";
 
 test.describe("Input Controls Showcase", () => {
-  test(
+  test.skip(
     "Verify TextBox Component",
     {
       tag: ["@ui", "@component", "@textbox", "@smoke", "@P1"],

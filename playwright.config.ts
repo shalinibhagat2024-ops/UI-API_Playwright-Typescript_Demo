@@ -92,7 +92,6 @@ export default defineConfig({
     {
       name: "ui",
       testDir: "./tests/ui",
-      testIgnore: ["**/authorization/**"],
       use: {
         ...devices["Desktop Chrome"],
         storageState: "playwright/.auth/AdminUser.json",

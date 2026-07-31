@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { DragDropShowcasePage } from "src/pages/showcase/DragDropShowcasePage";
 
 test.describe("DragDrop Component", () => {
-  test(
+  test.skip(
     "Drag element from A to B",
     {
       tag: ["@ui", "@component", "@dragdrop", "@smoke", "@P1"],

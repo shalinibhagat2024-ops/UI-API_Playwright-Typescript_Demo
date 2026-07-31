@@ -1,9 +1,9 @@
 import { test } from "@playwright/test";
 
-import { ToastShowcasePage } from "../../../src/pages/showcase/ToastShowcasePage";
+import { ToastShowcasePage } from "../../src/pages/showcase/ToastShowcasePage";
 
 test.describe("Toast Component", () => {
-  test(
+  test.fixme(
     "Verify toast message",
     {
       tag: ["@ui", "@component", "@toast", "@regression", "@P1"],

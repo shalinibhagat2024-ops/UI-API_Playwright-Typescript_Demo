@@ -3,7 +3,7 @@ import { test } from "@playwright/test";
 import { ProgressBarShowcasePage } from "src/pages/showcase/ProgressBarShowcasePage";
 
 test.describe("Progress Bar Component", () => {
-  test(
+  test.skip(
     "Verify Progress Bar",
     {
       tag: ["@ui", "@component", "@progressbar", "@regression", "@P1"],

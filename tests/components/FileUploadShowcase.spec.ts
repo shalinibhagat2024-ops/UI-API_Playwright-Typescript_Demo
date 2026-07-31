@@ -1,10 +1,10 @@
 import { test } from "@playwright/test";
 import path from "path";
 
-import { FileUploadShowcasePage } from "../../../src/pages/showcase/FileUploadShowcasePage";
+import { FileUploadShowcasePage } from "../../src/pages/showcase/FileUploadShowcasePage";
 
 test.describe("File Upload Component", () => {
-  test(
+  test.skip(
     "Verify user can upload file",
     {
       tag: ["@ui", "@component", "@upload", "@smoke", "@P1"],

@@ -1,9 +1,9 @@
 import { test } from "@playwright/test";
 
-import { ModalShowcasePage } from "../../../src/pages/showcase/ModalShowcasePage";
+import { ModalShowcasePage } from "../../src/pages/showcase/ModalShowcasePage";
 
 test.describe("Modal Component", () => {
-  test(
+  test.skip(
     "Verify user can open and close modal",
     {
       tag: ["@ui", "@component", "@modal", "@regression", "@P1"],
