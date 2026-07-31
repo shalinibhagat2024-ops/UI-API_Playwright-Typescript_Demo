@@ -10,7 +10,7 @@ export class TableShowcasePage extends BasePage {
     super(page);
   }
 
-  async open(): Promise<void> {
+  async open() {
     await this.navigate(ApplicationRoutes.demoqa.baseUrl, ApplicationRoutes.demoqa.webTables);
   }
 }

@@ -1,7 +1,7 @@
-import { BaseComponent } from "@core/helpers/components/BaseComponent";
+import { ComponentBase } from "@core/helpers/components/ComponentBase";
 import { Locator, Page } from "@playwright/test";
 
-export class GridComponent extends BaseComponent {
+export class GridComponent extends ComponentBase {
   constructor(page: Page, locator: Locator) {
     super(page, locator);
   }
@@ -31,8 +31,14 @@ export class GridComponent extends BaseComponent {
    * @param text Text to search.
    * @param rowLocator Relative locator for rows.
    */
-  async containsRow(text: string, rowLocator = "tr"): Promise<boolean> {
-    return (await this.locator.locator(rowLocator).filter({ hasText: text }).count()) > 0;
+  async containsRow(text: string): Promise<boolean> {
+    return (await this.rowContaining(text).count()) > 0;
+  }
+
+  rowContaining(text: string): Locator {
+    return this.locator.locator("tr").filter({
+      hasText: text,
+    });
   }
 
   /**
@@ -47,5 +53,13 @@ export class GridComponent extends BaseComponent {
    */
   cell(rowIndex: number, columnIndex: number): Locator {
     return this.row(rowIndex).locator("td").nth(columnIndex);
+  }
+
+  async clickRow(index: number) {
+    await this.click(this.row(index));
+  }
+
+  async clickCell(row: number, column: number) {
+    await this.click(this.cell(row, column));
   }
 }

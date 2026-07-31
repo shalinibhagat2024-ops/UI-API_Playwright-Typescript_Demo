@@ -11,10 +11,17 @@ test.describe("Pagination Component Showcase", () => {
     async ({ page }) => {
       const pagination = new PaginationShowcasePage(page);
 
-      await pagination.open();
-      await pagination.pagination.next();
+      await test.step("Open Pagination Showcase page", async () => {
+        await pagination.open();
+      });
 
-      expect(await pagination.pagination.hasPage(1)).toBeTruthy();
+      await test.step("Navigate to the next page", async () => {
+        await pagination.pagination.next();
+      });
+
+      await test.step("Verify the next page is displayed", async () => {
+        expect(await pagination.pagination.hasPage(1)).toBeTruthy();
+      });
     }
   );
 });

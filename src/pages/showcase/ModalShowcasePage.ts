@@ -4,35 +4,47 @@ import { Page } from "@playwright/test";
 import { BasePage } from "../AutomationExercise/basePage/BasePage";
 
 export class ModalShowcasePage extends BasePage {
-  readonly openModalButton = this.ui.button(
-    this.page.getByRole("button", {
-      name: "Small modal",
-    })
-  );
+  readonly btnSmallModal = this.page.getByRole("button", {
+    name: "Small modal",
+  });
 
-  readonly modal = this.ui.modal(this.page.locator(".modal-content"));
-  readonly closeButton = this.page.getByRole("button", {
+  readonly btnClose = this.page.getByRole("button", {
     name: "Close",
   });
 
-  async title(): Promise<string> {
-    return (await this.page.locator("#example-modal-sizes-title-sm").textContent()) ?? "";
-  }
+  readonly modal = this.ui.modal(this.page.locator(".modal-content"));
 
   constructor(page: Page) {
     super(page);
   }
 
-  async open(): Promise<void> {
+  /**
+   * Open the Modal Dialogs showcase page.
+   */
+  async open() {
     await this.navigate(ApplicationRoutes.demoqa.baseUrl, ApplicationRoutes.demoqa.modalDialogs);
   }
 
-  async openSmallModal(): Promise<void> {
-    await this.openModalButton.click();
-    await this.modal.open();
+  /**
+   * Open the Small Modal dialog.
+   */
+  async openSmallModal() {
+    await this.btnSmallModal.click();
+    await this.modal.waitUntilVisible();
   }
 
-  async closeModal(): Promise<void> {
-    await this.modal.close();
+  /**
+   * Close the Small Modal dialog.
+   */
+  async closeModal() {
+    await this.modal.closeBy(this.btnClose);
+    await this.modal.waitUntilHidden();
+  }
+
+  /**
+   * Returns the modal title.
+   */
+  async getTitle(): Promise<string> {
+    return ((await this.page.locator("#example-modal-sizes-title-sm").textContent()) ?? "").trim();
   }
 }

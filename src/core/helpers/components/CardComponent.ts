@@ -1,14 +1,14 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 
-import { BaseComponent } from "./BaseComponent";
+import { ComponentBase } from "./ComponentBase";
 
-export class CardComponent extends BaseComponent {
+export class CardComponent extends ComponentBase {
   constructor(page: Page, locator: Locator) {
     super(page, locator);
   }
 
   /**
-   * Returns child locator inside the card.
+   * Returns a child locator inside the card.
    */
   public find(selector: string): Locator {
     return this.locator.locator(selector);
@@ -17,35 +17,70 @@ export class CardComponent extends BaseComponent {
   /**
    * Hover over the card.
    */
-  public async hover(): Promise<void> {
-    await this.locator.hover();
+  public async hover() {
+    await super.hover();
   }
 
   /**
-   * Click on the card.
+   * Click the card.
    */
-  public async click(): Promise<void> {
-    await this.locator.click();
+  public async click() {
+    await super.click();
   }
 
   /**
-   * Verify card is visible.
+   * Returns all text from the card.
    */
-  public async verifyVisible(): Promise<void> {
-    await expect(this.locator).toBeVisible();
+  public async getText(): Promise<string> {
+    return await super.getText();
   }
 
   /**
-   * Verify card contains text.
+   * Verify the card is visible.
    */
-  public async contains(text: string): Promise<void> {
-    await expect(this.locator).toContainText(text);
+  public async verifyVisible() {
+    await this.assertions.visible(this.locator);
   }
 
   /**
-   * Returns all text from card.
+   * Verify the card is hidden.
    */
-  public async text(): Promise<string> {
-    return (await this.locator.textContent())?.trim() ?? "";
+  public async verifyHidden() {
+    await this.assertions.hidden(this.locator);
+  }
+
+  /**
+   * Verify the card is enabled.
+   */
+  public async verifyEnabled() {
+    await this.assertions.enabled(this.locator);
+  }
+
+  /**
+   * Verify the card is disabled.
+   */
+  public async verifyDisabled() {
+    await this.assertions.disabled(this.locator);
+  }
+
+  /**
+   * Verify the card contains the expected text.
+   */
+  public async verifyContains(expected: string | RegExp) {
+    await this.assertions.containsText(this.locator, expected);
+  }
+
+  /**
+   * Verify the card text.
+   */
+  public async verifyText(expected: string | RegExp) {
+    await this.assertions.text(this.locator, expected);
+  }
+
+  /**
+   * Verify the card is empty.
+   */
+  public async verifyEmpty() {
+    await this.assertions.empty(this.locator);
   }
 }

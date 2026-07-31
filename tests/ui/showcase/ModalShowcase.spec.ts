@@ -11,13 +11,25 @@ test.describe("Modal Component", () => {
     async ({ page }) => {
       const modal = new ModalShowcasePage(page);
 
-      await modal.open();
-      await modal.openSmallModal();
+      await test.step("Open Modal Showcase page", async () => {
+        await modal.open();
+      });
 
-      await modal.modal.verifyVisible();
+      await test.step("Open the small modal", async () => {
+        await modal.openSmallModal();
+      });
 
-      await modal.closeModal();
-      await modal.modal.verifyHidden();
+      await test.step("Verify the modal is displayed", async () => {
+        await modal.modal.verifyVisible();
+      });
+
+      await test.step("Close the modal", async () => {
+        await modal.closeModal();
+      });
+
+      await test.step("Verify the modal is closed", async () => {
+        await modal.modal.verifyHidden();
+      });
     }
   );
 });

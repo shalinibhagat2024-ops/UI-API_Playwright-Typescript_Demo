@@ -22,11 +22,11 @@ export class AuthAssertions {
   }
 
   // =====================================
-  // CRUD / Login Validation
+  // Login Validation
   // =====================================
 
   static verifyLogin(response: APIResponse, login: LoginResponse): void {
-    StatusAssertions.verify200(response);
+    StatusAssertions.verifySuccess(response);
 
     this.verifyLoginResponse(login);
   }
@@ -44,6 +44,7 @@ export class AuthAssertions {
 
     CommonAssertions.verifyString(currentUser.email, login.email);
   }
+
   static verifyCurrentUser(currentUser: CurrentUserResponse): void {
     CommonAssertions.verifyId(currentUser.id);
 

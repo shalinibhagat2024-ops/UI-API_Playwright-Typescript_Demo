@@ -1,7 +1,7 @@
-import { BaseComponent } from "@core/helpers/components/BaseComponent";
+import { ComponentBase } from "@core/helpers/components/ComponentBase";
 import { Locator, Page } from "@playwright/test";
 
-export class SpinnerComponent extends BaseComponent {
+export class SpinnerComponent extends ComponentBase {
   private static readonly DEFAULT_TIMEOUT = 15000;
 
   constructor(page: Page, locator: Locator) {
@@ -11,28 +11,28 @@ export class SpinnerComponent extends BaseComponent {
   /**
    * Wait until spinner becomes visible.
    */
-  async waitUntilVisible(timeout: number = SpinnerComponent.DEFAULT_TIMEOUT): Promise<void> {
+  async waitUntilVisible(timeout: number = SpinnerComponent.DEFAULT_TIMEOUT) {
     await this.waits.visible(this.locator, timeout);
   }
 
   /**
    * Wait until spinner disappears.
    */
-  async waitUntilHidden(timeout: number = SpinnerComponent.DEFAULT_TIMEOUT): Promise<void> {
+  async waitUntilHidden(timeout: number = SpinnerComponent.DEFAULT_TIMEOUT) {
     await this.waits.hidden(this.locator, timeout);
   }
 
   /**
    * Verify spinner is visible.
    */
-  async verifyVisible(): Promise<void> {
+  async verifyVisible() {
     await this.assertions.visible(this.locator);
   }
 
   /**
    * Verify spinner is hidden.
    */
-  async verifyHidden(): Promise<void> {
+  async verifyHidden() {
     await this.assertions.hidden(this.locator);
   }
 

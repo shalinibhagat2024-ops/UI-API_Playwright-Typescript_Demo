@@ -11,9 +11,17 @@ test.describe("Calendar Component", () => {
     async ({ page }) => {
       const calendar = new CalendarShowcasePage(page);
 
-      await calendar.open();
-      await calendar.selectBirthDate();
-      await calendar.verifySelectedDate();
+      await test.step("Open Calendar Showcase page", async () => {
+        await calendar.open();
+      });
+
+      await test.step("Select the birth date", async () => {
+        await calendar.selectBirthDate();
+      });
+
+      await test.step("Verify the selected birth date", async () => {
+        await calendar.verifySelectedDate();
+      });
     }
   );
 });

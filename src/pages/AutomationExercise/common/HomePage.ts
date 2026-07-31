@@ -2,67 +2,95 @@ import { ApplicationRoutes } from "@core/config/ApplicationRoutes";
 import { EnvironmentManager } from "@core/config/EnvironmentManager";
 import { Logger } from "@core/logger/Logger";
 import { Locator, Page } from "@playwright/test";
-import { BasePage } from "src/pages/AutomationExercise/basePage/BasePage";
+
+import { BasePage } from "../basePage/BasePage";
 
 export class HomePage extends BasePage {
+  // ==========================================================================
+  // Navigation
+  // ==========================================================================
+
   private readonly lnkSignupLogin: Locator;
   private readonly lnkProducts: Locator;
   private readonly lnkCart: Locator;
+  private readonly lnkLogout: Locator;
+
+  // ==========================================================================
+  // Labels
+  // ==========================================================================
+
   private readonly lblLoggedInAs: Locator;
-  private readonly logoutLink: Locator;
 
   constructor(page: Page) {
     super(page);
 
     this.lnkSignupLogin = page.locator("a[href='/login']");
+
     this.lnkProducts = page.locator("header").getByRole("link", {
       name: /^Products$/i,
     });
+
     this.lnkCart = page.locator("a[href='/view_cart']");
-    this.lblLoggedInAs = page.locator("li").filter({ hasText: "Logged in as" });
-    this.logoutLink = page.locator("a[href='/logout']");
+    this.lnkLogout = page.locator("a[href='/logout']");
+
+    this.lblLoggedInAs = page.locator("li").filter({
+      hasText: "Logged in as",
+    });
   }
 
   /**
-   * Open Home Page
+   * Opens the Home page.
    */
-  public async open(): Promise<void> {
-    Logger.info("Opening Automation Exercise Home Page.");
+  public async open() {
+    Logger.info("Opening Automation Exercise Home page.");
+
     await this.navigate(EnvironmentManager.getBaseUrl(), ApplicationRoutes.automationExercise.home);
   }
 
   /**
-   * Navigate to Login
+   * Opens the Login page.
+   * Logs out first if a user is already authenticated.
    */
-  public async openLogin(): Promise<void> {
-    Logger.info("Opening Login Page.");
-    if (await this.logoutLink.isVisible()) {
-      Logger.info("User is already logged in. Logging out...");
-      await this.logoutLink.click();
+  public async openLogin() {
+    Logger.info("Opening Login page.");
+
+    if (await this.isVisible(this.lnkLogout)) {
+      Logger.info("User is already logged in. Logging out.");
+
+      await this.click(this.lnkLogout);
+      await this.waits.networkIdle();
     }
-    await this.ui.button(this.lnkSignupLogin).click();
+
+    await this.click(this.lnkSignupLogin);
+    await this.waits.networkIdle();
   }
 
   /**
-   * Navigate to Products
+   * Opens the Products page.
    */
-  public async openProducts(): Promise<void> {
-    Logger.info("Opening Products.");
-    await this.ui.button(this.lnkProducts).click();
+  public async openProducts() {
+    Logger.info("Opening Products page.");
+
+    await this.click(this.lnkProducts);
+    await this.waits.networkIdle();
   }
 
   /**
-   * Navigate to Cart
+   * Opens the Cart page.
    */
-  public async openCart(): Promise<void> {
-    Logger.info("Opening Cart.");
-    await this.ui.button(this.lnkCart).click();
+  public async openCart() {
+    Logger.info("Opening Cart page.");
+
+    await this.click(this.lnkCart);
+    await this.waits.networkIdle();
   }
 
   /**
-   * Verify Logged In User
+   * Verifies the logged-in user.
    */
-  public async verifyLoggedInUser(name: string): Promise<void> {
-    await this.assertions.containsText(this.lblLoggedInAs, name);
+  public async verifyLoggedInUser(name: string): Promise<this> {
+    await this.assertions.containsText(this.lblLoggedInAs, `Logged in as ${name}`);
+
+    return this;
   }
 }

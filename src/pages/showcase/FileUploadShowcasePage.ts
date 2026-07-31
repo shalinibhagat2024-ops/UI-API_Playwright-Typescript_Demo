@@ -11,15 +11,15 @@ export class FileUploadShowcasePage extends BasePage {
     super(page);
   }
 
-  async open(): Promise<void> {
+  async open() {
     await this.navigate(ApplicationRoutes.demoqa.baseUrl, ApplicationRoutes.demoqa.uploadDownload);
   }
 
-  async uploadSampleFile(filePath: string): Promise<void> {
+  async uploadSampleFile(filePath: string) {
     await this.uploadInput.upload(filePath);
   }
 
-  async verifyUploadedFile(expected: string): Promise<void> {
+  async verifyUploadedFile(expected: string) {
     await this.assertions.containsText(this.uploadedFile, expected);
   }
 }

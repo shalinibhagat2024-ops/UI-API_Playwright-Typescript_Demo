@@ -9,15 +9,22 @@ export class DeleteAccountPage extends BasePage {
   constructor(page: Page) {
     super(page);
 
-    this.lblAccountDeleted = this.page.getByText("ACCOUNT DELETED!");
-    this.btnContinue = this.page.locator("[data-qa='continue-button']");
+    this.lblAccountDeleted = page.getByText("ACCOUNT DELETED!");
+    this.btnContinue = page.locator("[data-qa='continue-button']");
   }
 
-  public async verifyDeleted(): Promise<void> {
+  /**
+   * Verify Account Deleted successfully.
+   */
+  public async verifyDeleted() {
     await this.assertions.visible(this.lblAccountDeleted);
   }
 
-  public async continue(): Promise<void> {
-    await this.ui.button(this.btnContinue).click();
+  /**
+   * Click Continue button.
+   */
+  public async continue() {
+    await this.click(this.btnContinue);
+    await this.waits.networkIdle();
   }
 }

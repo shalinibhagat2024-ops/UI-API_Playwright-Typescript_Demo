@@ -3,23 +3,43 @@ import { test } from "@playwright/test";
 import { SpinnerShowcasePage } from "src/pages/showcase/SpinnerShowcasePage";
 
 test.describe("Spinner Component Showcase", () => {
-  test("Verify Spinner Component", async ({ page }) => {
-    const spinnerPage = new SpinnerShowcasePage(page);
+  test(
+    "Verify Spinner Component",
+    {
+      tag: ["@ui", "@component", "@spinner", "@regression", "@P1"],
+    },
+    async ({ page }) => {
+      const spinnerPage = new SpinnerShowcasePage(page);
 
-    await page.goto(
-      `${ApplicationRoutes.internet.baseUrl}${ApplicationRoutes.internet.dynamicLoading}`
-    );
+      await test.step("Open Spinner Showcase page", async () => {
+        await page.goto(
+          `${ApplicationRoutes.internet.baseUrl}${ApplicationRoutes.internet.dynamicLoading}`
+        );
+      });
 
-    await spinnerPage.clickStart();
+      await test.step("Start the dynamic loading process", async () => {
+        await spinnerPage.clickStart();
+      });
 
-    await spinnerPage.spinner.waitUntilVisible();
+      await test.step("Wait for the spinner to become visible", async () => {
+        await spinnerPage.spinner.waitUntilVisible();
+      });
 
-    await spinnerPage.spinner.verifyVisible();
+      await test.step("Verify the spinner is displayed", async () => {
+        await spinnerPage.spinner.verifyVisible();
+      });
 
-    await spinnerPage.spinner.waitUntilHidden();
+      await test.step("Wait for the spinner to disappear", async () => {
+        await spinnerPage.spinner.waitUntilHidden();
+      });
 
-    await spinnerPage.spinner.verifyHidden();
+      await test.step("Verify the spinner is no longer displayed", async () => {
+        await spinnerPage.spinner.verifyHidden();
+      });
 
-    await spinnerPage.verifyLoaded();
-  });
+      await test.step("Verify the content is loaded successfully", async () => {
+        await spinnerPage.verifyLoaded();
+      });
+    }
+  );
 });

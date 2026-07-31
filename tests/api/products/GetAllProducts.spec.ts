@@ -8,12 +8,20 @@ import { test } from "@fixtures/api.fixture";
 
 test(
   "GET - Get All Products",
-  { tag: ["@api", "@sanity", "@apiProduct", "@p2"] },
+  {
+    tag: ["@api", "@sanity", "@apiProduct", "@p2"],
+  },
   async ({ productService }) => {
-    const response = await productService.getAllProducts();
-    StatusAssertions.verify200(response);
-    const products = await ResponseUtil.json<ProductListResponse>(response);
-    SchemaAssertions.validate(Schemas.ProductList, products);
-    ProductAssertions.verifyProductList(products);
+    await test.step("Retrieve all products", async () => {
+      const response = await productService.getAllProducts();
+
+      StatusAssertions.verifySuccess(response);
+
+      const products = await ResponseUtil.json<ProductListResponse>(response);
+
+      SchemaAssertions.validate(Schemas.ProductList, products);
+
+      ProductAssertions.verifyProductList(products);
+    });
   }
 );

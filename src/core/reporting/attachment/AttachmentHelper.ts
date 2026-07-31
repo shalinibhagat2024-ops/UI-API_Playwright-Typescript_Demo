@@ -2,11 +2,7 @@ import * as allure from "allure-js-commons";
 import fs from "fs";
 
 export class AttachmentHelper {
-  public static async attachFile(
-    title: string,
-    filePath: string,
-    contentType: string
-  ): Promise<void> {
+  public static async attachFile(title: string, filePath: string, contentType: string) {
     if (!filePath || !fs.existsSync(filePath)) {
       return;
     }
@@ -16,11 +12,11 @@ export class AttachmentHelper {
     });
   }
 
-  public static async attachText(title: string, content: string): Promise<void> {
+  public static async attachText(title: string, content: string) {
     await allure.attachment(title, content, "text/plain");
   }
 
-  public static async attachJson(title: string, object: unknown): Promise<void> {
+  public static async attachJson(title: string, object: unknown) {
     await allure.attachment(title, JSON.stringify(object, null, 2), "application/json");
   }
 }

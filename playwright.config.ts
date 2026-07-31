@@ -88,9 +88,6 @@ export default defineConfig({
     {
       name: "setup-admin",
       testMatch: "tests/setup/setup-admin.setup.ts",
-      use: {
-        ...devices["Desktop Firefox"],
-      },
     },
     {
       name: "ui",

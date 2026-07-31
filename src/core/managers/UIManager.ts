@@ -1,58 +1,18 @@
-import { ButtonComponent } from "@core/helpers/components/ButtonComponent";
 import { CalendarComponent } from "@core/helpers/components/CalendarComponent";
 import { CardComponent } from "@core/helpers/components/CardComponent";
-import { CheckboxComponent } from "@core/helpers/components/CheckboxComponent";
 import { DragDropComponent } from "@core/helpers/components/DragDropComponent";
-import { DropdownComponent } from "@core/helpers/components/DropdownComponent";
 import { FileUploadComponent } from "@core/helpers/components/FileUploadComponent";
 import { GridComponent } from "@core/helpers/components/GridComponent";
 import { ModalComponent } from "@core/helpers/components/ModalComponent";
 import { PaginationComponent } from "@core/helpers/components/PaginationComponent";
 import { ProgressBarComponent } from "@core/helpers/components/ProgressBarComponent";
-import { RadioButtonComponent } from "@core/helpers/components/RadioButtonComponent";
 import { SpinnerComponent } from "@core/helpers/components/SpinnerComponent";
 import { TableComponent } from "@core/helpers/components/TableComponent";
-import { TextBoxComponent } from "@core/helpers/components/TextBoxComponent";
 import { ToastComponent } from "@core/helpers/components/ToastComponent";
 import { Locator, Page } from "@playwright/test";
 
 export class UIManager {
   constructor(private readonly page: Page) {}
-
-  /**
-   * TextBox
-   */
-  public textbox(locator: Locator): TextBoxComponent {
-    return new TextBoxComponent(this.page, locator);
-  }
-
-  /**
-   * Button
-   */
-  public button(locator: Locator): ButtonComponent {
-    return new ButtonComponent(this.page, locator);
-  }
-
-  /**
-   * Checkbox
-   */
-  public checkbox(locator: Locator): CheckboxComponent {
-    return new CheckboxComponent(this.page, locator);
-  }
-
-  // /**
-  //  * Radio Button
-  //  */
-  public radio(locator: Locator): RadioButtonComponent {
-    return new RadioButtonComponent(this.page, locator);
-  }
-
-  // /**
-  //  * Dropdown
-  //  */
-  public dropdown(locator: Locator): DropdownComponent {
-    return new DropdownComponent(this.page, locator);
-  }
 
   // /**
   //  * Calendar / Date Picker

@@ -11,11 +11,25 @@ test.describe("Grid Component Showcase", () => {
     async ({ page }) => {
       const grid = new GridShowcasePage(page);
 
-      await grid.open();
-      await page.waitForLoadState("networkidle");
-      expect(await grid.employeeGrid.rowCount()).toBeGreaterThan(0);
-      expect(await grid.employeeGrid.columnCount()).toBeGreaterThan(0);
-      expect(await grid.employeeGrid.containsRow("Cierra")).toBeTruthy();
+      await test.step("Open Grid Showcase page", async () => {
+        await grid.open();
+      });
+
+      await test.step("Wait for the grid data to load", async () => {
+        await page.waitForLoadState("networkidle");
+      });
+
+      await test.step("Verify the grid contains employee records", async () => {
+        expect(await grid.employeeGrid.rowCount()).toBeGreaterThan(0);
+      });
+
+      await test.step("Verify the grid contains columns", async () => {
+        expect(await grid.employeeGrid.columnCount()).toBeGreaterThan(0);
+      });
+
+      await test.step("Verify the employee 'Cierra' is displayed in the grid", async () => {
+        expect(await grid.employeeGrid.containsRow("Cierra")).toBeTruthy();
+      });
     }
   );
 });

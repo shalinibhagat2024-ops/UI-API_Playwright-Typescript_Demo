@@ -1,7 +1,7 @@
-import { BaseComponent } from "@core/helpers/components/BaseComponent";
+import { ComponentBase } from "@core/helpers/components/ComponentBase";
 import { Locator, Page } from "@playwright/test";
 
-export class TableComponent extends BaseComponent {
+export class TableComponent extends ComponentBase {
   constructor(page: Page, locator: Locator) {
     super(page, locator);
   }
@@ -14,7 +14,7 @@ export class TableComponent extends BaseComponent {
   }
 
   /**
-   * Returns all table columns.
+   * Returns all table headers.
    */
   columns(): Locator {
     return this.locator.locator("thead th");
@@ -24,21 +24,21 @@ export class TableComponent extends BaseComponent {
    * Returns total row count.
    */
   async rowCount(): Promise<number> {
-    return await this.rows().count();
+    return this.rows().count();
   }
 
   /**
    * Returns total column count.
    */
   async columnCount(): Promise<number> {
-    return await this.columns().count();
+    return this.columns().count();
   }
 
   /**
-   * Returns all table headers.
+   * Returns all header names.
    */
   async headers(): Promise<string[]> {
-    return (await this.columns().allInnerTexts()).map((h) => h.trim());
+    return (await this.columns().allInnerTexts()).map((header) => header.trim());
   }
 
   /**
@@ -59,39 +59,53 @@ export class TableComponent extends BaseComponent {
    * Returns cell text.
    */
   async cellText(row: number, column: number): Promise<string> {
-    return (await this.cell(row, column).innerText()).trim();
+    return this.getText(this.cell(row, column));
   }
 
   /**
-   * Returns all cell values from a row.
+   * Returns all values from a row.
    */
   async rowText(row: number): Promise<string[]> {
-    return (await this.row(row).allInnerTexts()).map((text) => text.trim());
+    return (await this.row(row).locator("td").allInnerTexts()).map((text) => text.trim());
   }
 
   /**
-   * Click a specific row.
+   * Returns all values from a column.
    */
-  async clickRow(index: number): Promise<void> {
-    await this.actions.click(this.row(index));
+  async columnText(column: number): Promise<string[]> {
+    const rows = this.rows();
+    const values: string[] = [];
+
+    for (let index = 0; index < (await rows.count()); index++) {
+      values.push(await this.getText(this.cell(index, column)));
+    }
+
+    return values;
   }
 
   /**
-   * Click a specific cell.
+   * Click a row.
    */
-  async clickCell(row: number, column: number): Promise<void> {
-    await this.actions.click(this.cell(row, column));
+  async clickRow(index: number) {
+    await this.click(this.row(index));
   }
 
   /**
-   * Returns true if a row contains text.
+   * Click a cell.
+   */
+  async clickCell(row: number, column: number) {
+    await this.click(this.cell(row, column));
+  }
+
+  /**
+   * Returns true if a row contains the specified text.
    */
   async containsRow(text: string): Promise<boolean> {
-    return (await this.rows().filter({ hasText: text }).count()) > 0;
+    return (await this.rowContaining(text).count()) > 0;
   }
 
   /**
-   * Returns locator for matching row.
+   * Returns the matching row locator.
    */
   rowContaining(text: string): Locator {
     return this.rows().filter({
@@ -100,16 +114,67 @@ export class TableComponent extends BaseComponent {
   }
 
   /**
+   * Click a row containing the specified text.
+   */
+  async clickRowContaining(text: string) {
+    await this.click(this.rowContaining(text));
+  }
+
+  /**
+   * Returns a cell by column header.
+   */
+  async cellByHeader(row: number, header: string): Promise<Locator> {
+    const headers = await this.headers();
+    const columnIndex = headers.indexOf(header);
+
+    if (columnIndex === -1) {
+      throw new Error(`Table header '${header}' was not found.`);
+    }
+
+    return this.cell(row, columnIndex);
+  }
+
+  /**
+   * Returns text by column header.
+   */
+  async cellTextByHeader(row: number, header: string): Promise<string> {
+    const cell = await this.cellByHeader(row, header);
+    return this.getText(cell);
+  }
+
+  /**
    * Verify text exists in the table.
    */
-  async verifyContainsText(text: string): Promise<void> {
+  async verifyContainsText(text: string) {
     await this.assertions.containsText(this.locator, text);
   }
 
   /**
-   * Verify no records are displayed.
+   * Verify no records message.
    */
-  async verifyNoRecords(message = "No Records Found"): Promise<void> {
+  async verifyNoRecords(message = "No Records Found") {
     await this.assertions.containsText(this.locator, message);
+  }
+
+  /**
+   * Verify row exists.
+   */
+  async verifyRowExists(text: string) {
+    const exists = await this.containsRow(text);
+
+    if (!exists) {
+      throw new Error(`Row containing '${text}' was not found.`);
+    }
+  }
+
+  /**
+   * Verify row does not exist.
+   */
+  async verifyRowNotExists(text: string) {
+    const exists = await this.containsRow(text);
+
+    if (exists) {
+      throw new Error(`Row containing '${text}' was found.`);
+    }
   }
 }

@@ -13,15 +13,15 @@ export class CalendarShowcasePage extends BasePage {
     this.datePicker = new DatePickerComponent(page, page.locator("#datePickerMonthYearInput"));
   }
 
-  async open(): Promise<void> {
+  async open() {
     await this.navigate(ApplicationRoutes.demoqa.baseUrl, ApplicationRoutes.demoqa.datePicker);
   }
 
-  async selectBirthDate(): Promise<void> {
+  async selectBirthDate() {
     await this.datePicker.selectDate("2026", "June", "25");
   }
 
-  async verifySelectedDate(): Promise<void> {
+  async verifySelectedDate() {
     await this.datePicker.verifyValue("06/25/2026");
   }
 }

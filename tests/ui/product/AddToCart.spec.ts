@@ -10,10 +10,21 @@ test.describe("Add Product", () => {
     async ({ pages }) => {
       const product = ProductFactory.blueTop();
 
-      await pages.automationExercise.home.open();
-      await pages.automationExercise.auth.products.open();
-      await pages.automationExercise.auth.products.addToCart(product);
-      await pages.automationExercise.auth.products.viewCart();
+      await test.step("Open Automation Exercise Home page", async () => {
+        await pages.automationExercise.home.open();
+      });
+
+      await test.step("Navigate to Products page", async () => {
+        await pages.automationExercise.auth.products.open();
+      });
+
+      await test.step(`Add '${product.name}' to cart`, async () => {
+        await pages.automationExercise.auth.products.addToCart(product);
+      });
+
+      await test.step("Open Shopping Cart", async () => {
+        await pages.automationExercise.auth.products.viewCart();
+      });
     }
   );
 });

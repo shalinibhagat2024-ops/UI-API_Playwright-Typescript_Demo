@@ -1,124 +1,97 @@
+import { ProductInformationComponent } from "@core/helpers/components/automationexercise/ProductInformationComponent";
 import { Logger } from "@core/logger/Logger";
-import { Locator, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { Product } from "src/models/Product";
-import { BasePage } from "src/pages/AutomationExercise/basePage/BasePage";
-import { ProductBuilder } from "src/testdata/builders/ProductBuilder";
+
+import { BasePage } from "../basePage/BasePage";
 
 export class ProductDetailsPage extends BasePage {
-  private readonly productInformation: Locator;
-  private readonly txtQuantity: Locator;
-  private readonly btnAddToCart: Locator;
+  private readonly productInformation: ProductInformationComponent;
 
   constructor(page: Page) {
     super(page);
-    this.productInformation = page.locator(".product-information");
-    this.txtQuantity = page.locator("#quantity");
-    this.btnAddToCart = page.locator("button.cart");
+
+    this.productInformation = new ProductInformationComponent(page);
   }
 
   /**
-   * Verify Product Details Page Loaded
+   * Verify Product Details page.
    */
-  public async verifyLoaded(): Promise<void> {
-    await this.assertions.visible(this.productInformation);
+  public async verifyLoaded(): Promise<this> {
+    Logger.info("Verifying Product Details page.");
+
+    await this.productInformation.verifyLoaded();
+
+    return this;
   }
 
   /**
-   * Product Name
+   * Returns product name.
    */
   public async getName(): Promise<string> {
-    return (await this.productInformation.locator("h2").textContent())?.trim() ?? "";
+    return this.productInformation.getName();
   }
 
   /**
-   * Product Price
+   * Returns product price.
    */
   public async getPrice(): Promise<number> {
-    const text = (await this.productInformation.locator("span span").first().textContent()) ?? "";
-    return Number(text.replace("Rs.", "").trim());
+    return this.productInformation.getPrice();
   }
 
   /**
-   * Category
+   * Returns category.
    */
   public async getCategory(): Promise<string> {
-    const text = (await this.productInformation.locator("p").first().textContent()) ?? "";
-    return text.replace("Category:", "").trim();
+    return this.productInformation.getCategory();
   }
 
   /**
-   * Availability
+   * Returns availability.
    */
   public async getAvailability(): Promise<string> {
-    const text =
-      (await this.productInformation
-        .locator("p")
-        .filter({
-          hasText: "Availability",
-        })
-        .textContent()) ?? "";
-    return text.replace("Availability:", "").trim();
+    return this.productInformation.getAvailability();
   }
 
   /**
-   * Condition
+   * Returns condition.
    */
   public async getCondition(): Promise<string> {
-    const text =
-      (await this.productInformation
-        .locator("p")
-        .filter({
-          hasText: "Condition",
-        })
-        .textContent()) ?? "";
-    return text.replace("Condition:", "").trim();
+    return this.productInformation.getCondition();
   }
 
   /**
-   * Brand
+   * Returns brand.
    */
   public async getBrand(): Promise<string> {
-    const text =
-      (await this.productInformation
-        .locator("p")
-        .filter({
-          hasText: "Brand",
-        })
-        .textContent()) ?? "";
-    return text.replace("Brand:", "").trim();
+    return this.productInformation.getBrand();
   }
 
   /**
-   * Quantity
+   * Sets quantity.
    */
-  public async setQuantity(quantity: number): Promise<void> {
-    await this.txtQuantity.fill(quantity.toString());
+  public async setQuantity(quantity: number) {
+    await this.productInformation.setQuantity(quantity);
   }
 
   /**
-   * Read Quantity
+   * Returns quantity.
    */
   public async getQuantity(): Promise<number> {
-    return Number(await this.txtQuantity.inputValue());
+    return this.productInformation.getQuantity();
   }
 
   /**
-   * Add To Cart
+   * Adds product to cart.
    */
-  public async addToCart(): Promise<void> {
-    Logger.info("Adding Product To Cart.");
-    await this.ui.button(this.btnAddToCart).click();
+  public async addToCart() {
+    await this.productInformation.addToCart();
   }
 
   /**
-   * Read Complete Product
+   * Returns complete product.
    */
   public async getProduct(): Promise<Product> {
-    return new ProductBuilder()
-      .name(await this.getName())
-      .price(await this.getPrice())
-      .category(await this.getCategory())
-      .brand(await this.getBrand())
-      .build();
+    return this.productInformation.getProduct();
   }
 }

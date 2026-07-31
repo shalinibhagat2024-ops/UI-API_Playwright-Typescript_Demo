@@ -1,51 +1,97 @@
-import { BaseComponent } from "@core/helpers/components/BaseComponent";
+import { ComponentBase } from "@core/helpers/components/ComponentBase";
 import { Locator, Page } from "@playwright/test";
 
-export class PaginationComponent extends BaseComponent {
+export class PaginationComponent extends ComponentBase {
+  private readonly btnPrevious: Locator;
+  private readonly btnNext: Locator;
+
   constructor(page: Page, locator: Locator) {
     super(page, locator);
+
+    this.btnPrevious = locator.getByRole("button", {
+      name: /previous/i,
+    });
+
+    this.btnNext = locator.getByRole("button", {
+      name: /next/i,
+    });
   }
 
-  /**
-   * Wait until pagination is visible.
-   */
-  async waitUntilVisible(): Promise<void> {
-    await this.waits.visible(this.locator);
+  // ==========================================================================
+  // Waits
+  // ==========================================================================
+
+  async waitUntilVisible() {
+    await this.waitForVisible();
   }
 
-  /**
-   * Click the Next button.
-   *
-   * @param nextButton Locator for the Next button.
-   */
-  async next(nextButton: Locator): Promise<void> {
-    await this.actions.click(nextButton);
+  async waitUntilHidden() {
+    await this.waitForHidden();
   }
 
-  /**
-   * Click the Previous button.
-   *
-   * @param previousButton Locator for the Previous button.
-   */
-  async previous(previousButton: Locator): Promise<void> {
-    await this.actions.click(previousButton);
+  // ==========================================================================
+  // Verifications
+  // ==========================================================================
+
+  async verifyVisible() {
+    await this.assertions.visible(this.locator);
   }
 
-  /**
-   * Navigate to a specific page.
-   *
-   * @param pageLocator Locator for the page number.
-   */
-  async goToPage(pageLocator: Locator): Promise<void> {
-    await this.actions.click(pageLocator);
+  async verifyHidden() {
+    await this.assertions.hidden(this.locator);
   }
 
-  /**
-   * Returns whether a page number is visible.
-   *
-   * @param pageLocator Locator for the page number.
-   */
-  async hasPage(pageLocator: Locator): Promise<boolean> {
-    return await this.actions.isVisible(pageLocator);
+  // ==========================================================================
+  // Navigation
+  // ==========================================================================
+
+  async next() {
+    await this.waitForVisible(this.btnNext);
+    await this.click(this.btnNext);
+  }
+
+  async previous() {
+    await this.waitForVisible(this.btnPrevious);
+    await this.click(this.btnPrevious);
+  }
+
+  async goToPage(pageNumber: number) {
+    const pageButton = this.getPageButton(pageNumber);
+
+    await this.waitForVisible(pageButton);
+    await this.click(pageButton);
+  }
+
+  // ==========================================================================
+  // Information
+  // ==========================================================================
+
+  async hasPage(pageNumber: number): Promise<boolean> {
+    return this.isVisible(this.getPageButton(pageNumber));
+  }
+
+  async pageCount(): Promise<number> {
+    return await this.locator
+      .getByRole("button")
+      .filter({
+        hasText: /^\d+$/,
+      })
+      .count();
+  }
+
+  async verifyCurrentPage(pageNumber: number) {
+    const pageButton = this.getPageButton(pageNumber);
+
+    await this.assertions.attribute(pageButton, "aria-current", "page");
+  }
+
+  // ==========================================================================
+  // Private Helpers
+  // ==========================================================================
+
+  private getPageButton(pageNumber: number): Locator {
+    return this.locator.getByRole("button", {
+      name: pageNumber.toString(),
+    });
   }
 }

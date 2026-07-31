@@ -6,7 +6,7 @@ import { JsonReader } from "../helpers/dataReaders/JsonReader";
 
 export class TestDataManager {
   private static getData() {
-    const environment = EnvironmentManager.getCurrentEnvironment();
+    const environment = EnvironmentManager.getEnvironmentName();
     const filePath = path.join(process.cwd(), "src", "data", "testdata", environment, "users.json");
     return JsonReader.read<Record<string, User>>(filePath);
   }
@@ -16,7 +16,7 @@ export class TestDataManager {
   }
 
   public static getRegisterUser(name: string) {
-    const environment = EnvironmentManager.getCurrentEnvironment();
+    const environment = EnvironmentManager.getEnvironmentName();
     const filePath = path.join(
       process.cwd(),
       "src",
@@ -30,7 +30,7 @@ export class TestDataManager {
   }
 
   public static getProduct(name: string) {
-    const environment = EnvironmentManager.getCurrentEnvironment();
+    const environment = EnvironmentManager.getEnvironmentName();
     const filePath = path.join(
       process.cwd(),
       "src",

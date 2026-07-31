@@ -6,20 +6,33 @@ import { ProductFactory } from "src/testdata/factories/ProductFactory";
 test.describe("Search Product", () => {
   test(
     "Search Existing Product",
-
     {
       tag: ["@ui", "@products", "@smoke"],
     },
-
     async ({ pages }) => {
-      await UiMetadata.productSearch();
       const product = ProductFactory.blueTop();
-      await pages.automationExercise.home.open();
-      await pages.automationExercise.auth.products.open();
-      await pages.automationExercise.auth.products.search(product);
-      ProductAssertions.exists(
-        await pages.automationExercise.auth.products.containsProduct(product)
-      );
+
+      await test.step("Add Product Search metadata", async () => {
+        await UiMetadata.productSearch();
+      });
+
+      await test.step("Open Automation Exercise Home page", async () => {
+        await pages.automationExercise.home.open();
+      });
+
+      await test.step("Navigate to Products page", async () => {
+        await pages.automationExercise.auth.products.open();
+      });
+
+      await test.step(`Search product '${product.name}'`, async () => {
+        await pages.automationExercise.auth.products.searchProduct(product);
+      });
+
+      await test.step("Verify the searched product is displayed", async () => {
+        ProductAssertions.exists(
+          await pages.automationExercise.auth.products.containsProduct(product)
+        );
+      });
     }
   );
 });

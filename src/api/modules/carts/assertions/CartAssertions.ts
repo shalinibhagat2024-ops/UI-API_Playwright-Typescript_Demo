@@ -3,6 +3,7 @@ import { CartRequest } from "@api/modules/carts/models/CartRequest";
 import { CartResponse } from "@api/modules/carts/models/CartResponse";
 import { CommonAssertions } from "@api/shared/assertions/CommonAssertions";
 import { StatusAssertions } from "@api/shared/assertions/StatusAssertions";
+import { HttpStatus } from "@api/shared/constants/HttpStatus";
 import { APIResponse } from "@playwright/test";
 import { UserResponse } from "src/api/modules/users/models/UserResponse";
 
@@ -30,7 +31,7 @@ export class CartAssertions {
   // ============================================
 
   static verifyCreatedCart(response: APIResponse, request: CartRequest, cart: CartResponse): void {
-    StatusAssertions.verify201(response);
+    StatusAssertions.verifyStatus(response, HttpStatus.CREATED);
 
     this.verifyCart(cart);
 
@@ -38,16 +39,18 @@ export class CartAssertions {
   }
 
   static verifyUpdatedCart(response: APIResponse, cart: CartResponse): void {
-    StatusAssertions.verify200(response);
+    StatusAssertions.verifySuccess(response);
 
     this.verifyCart(cart);
   }
 
   static verifyDeletedCart(response: APIResponse): void {
-    StatusAssertions.verify200(response);
+    StatusAssertions.verifySuccess(response);
   }
 
-  // Workflow Assertions
+  // ============================================
+  // Workflow Validation
+  // ============================================
 
   static verifyCartBelongsToUser(cart: CartResponse, user: UserResponse): void {
     this.verifyCart(cart);
@@ -60,7 +63,7 @@ export class CartAssertions {
     cart: CartResponse,
     user: UserResponse
   ): void {
-    StatusAssertions.verify201(response);
+    StatusAssertions.verifyStatus(response, HttpStatus.CREATED);
 
     this.verifyCartBelongsToUser(cart, user);
   }

@@ -2,6 +2,7 @@ import { UserListResponse } from "@api/modules/users/models/UserListResponse";
 import { UserRequest } from "@api/modules/users/models/UserRequest";
 import { UserResponse } from "@api/modules/users/models/UserResponse";
 import { StatusAssertions } from "@api/shared/assertions/StatusAssertions";
+import { HttpStatus } from "@api/shared/constants/HttpStatus";
 import { APIResponse, expect } from "@playwright/test";
 import { CommonAssertions } from "src/api/shared/assertions/CommonAssertions";
 
@@ -31,7 +32,7 @@ export class UserAssertions {
   // =====================================
 
   static verifyCreatedUser(response: APIResponse, request: UserRequest, user: UserResponse): void {
-    StatusAssertions.verify201(response);
+    StatusAssertions.verifyStatus(response, HttpStatus.CREATED);
 
     this.verifyUser(user);
 
@@ -47,7 +48,7 @@ export class UserAssertions {
     user: UserResponse,
     expectedFirstName: string
   ): void {
-    StatusAssertions.verify200(response);
+    StatusAssertions.verifySuccess(response);
 
     this.verifyUser(user);
 
@@ -55,10 +56,10 @@ export class UserAssertions {
   }
 
   static verifyDeletedUser(response: APIResponse): void {
-    StatusAssertions.verify200(response);
+    StatusAssertions.verifySuccess(response);
   }
 
-  public static verifyUsersExist(users: UserListResponse): void {
+  static verifyUsersExist(users: UserListResponse): void {
     expect(users.users.length).toBeGreaterThan(0);
   }
 

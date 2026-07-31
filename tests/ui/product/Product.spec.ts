@@ -14,8 +14,13 @@ test.describe(
     test.beforeEach(async ({ pages }) => {
       product = ProductFactory.blueTop();
 
-      await pages.automationExercise.home.open();
-      await pages.automationExercise.auth.products.open();
+      await test.step("Open Automation Exercise Home page", async () => {
+        await pages.automationExercise.home.open();
+      });
+
+      await test.step("Navigate to Products page", async () => {
+        await pages.automationExercise.auth.products.open();
+      });
     });
 
     test.afterEach(async ({}, testInfo) => {
@@ -28,13 +33,19 @@ test.describe(
         tag: ["@smoke"],
       },
       async ({ pages }) => {
-        await UiMetadata.productSearch();
+        await test.step("Add Product Search metadata", async () => {
+          await UiMetadata.productSearch();
+        });
 
-        await pages.automationExercise.auth.products.search(product);
+        await test.step(`Search product '${product.name}'`, async () => {
+          await pages.automationExercise.auth.products.searchProduct(product);
+        });
 
-        ProductAssertions.exists(
-          await pages.automationExercise.auth.products.containsProduct(product)
-        );
+        await test.step("Verify the searched product is displayed", async () => {
+          ProductAssertions.exists(
+            await pages.automationExercise.auth.products.containsProduct(product)
+          );
+        });
       }
     );
 
@@ -44,9 +55,13 @@ test.describe(
         tag: ["@smoke", "@p2"],
       },
       async ({ pages }) => {
-        await pages.automationExercise.auth.products.addToCart(product);
+        await test.step(`Add '${product.name}' to cart`, async () => {
+          await pages.automationExercise.auth.products.addToCart(product);
+        });
 
-        await pages.automationExercise.auth.products.viewCart();
+        await test.step("Open Shopping Cart", async () => {
+          await pages.automationExercise.auth.products.viewCart();
+        });
       }
     );
 
@@ -56,9 +71,13 @@ test.describe(
         tag: ["@regression"],
       },
       async ({ pages, page }) => {
-        await pages.automationExercise.auth.products.selectCategory("Women", "Dress");
+        await test.step("Select 'Women > Dress' category", async () => {
+          await pages.automationExercise.auth.products.selectCategory("Women", "Dress");
+        });
 
-        await expect(page).toHaveURL(/category_products/);
+        await test.step("Verify Category Products page is displayed", async () => {
+          await expect(page).toHaveURL(/category_products/);
+        });
       }
     );
 
@@ -68,9 +87,13 @@ test.describe(
         tag: ["@regression", "@p1"],
       },
       async ({ pages, page }) => {
-        await pages.automationExercise.auth.products.selectBrand("Polo");
+        await test.step("Select 'Polo' brand", async () => {
+          await pages.automationExercise.auth.products.selectBrand("Polo");
+        });
 
-        await expect(page).toHaveURL(/brand_products/);
+        await test.step("Verify Brand Products page is displayed", async () => {
+          await expect(page).toHaveURL(/brand_products/);
+        });
       }
     );
   }

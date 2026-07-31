@@ -3,9 +3,21 @@ import { test } from "@playwright/test";
 import { InputControlsShowcasePage } from "../../../src/pages/showcase/InputControlsShowcasePage";
 
 test.describe("Input Controls Showcase", () => {
-  test("Verify TextBox Component", async ({ page }) => {
-    const input = new InputControlsShowcasePage(page);
-    await input.open();
-    await input.submitInputForm();
-  });
+  test(
+    "Verify TextBox Component",
+    {
+      tag: ["@ui", "@component", "@textbox", "@smoke", "@P1"],
+    },
+    async ({ page }) => {
+      const input = new InputControlsShowcasePage(page);
+
+      await test.step("Open Input Controls Showcase page", async () => {
+        await input.open();
+      });
+
+      await test.step("Submit the input form", async () => {
+        await input.submitInputForm();
+      });
+    }
+  );
 });

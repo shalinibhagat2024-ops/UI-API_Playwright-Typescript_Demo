@@ -12,12 +12,19 @@ test.describe("File Upload Component", () => {
     async ({ page }) => {
       const upload = new FileUploadShowcasePage(page);
 
-      await upload.open();
-
       const filePath = path.join(process.cwd(), "src", "testdata", "sample.pdf");
 
-      await upload.uploadSampleFile(filePath);
-      await upload.verifyUploadedFile("sample.pdf");
+      await test.step("Open File Upload Showcase page", async () => {
+        await upload.open();
+      });
+
+      await test.step("Upload the sample PDF file", async () => {
+        await upload.uploadSampleFile(filePath);
+      });
+
+      await test.step("Verify the uploaded file name is displayed", async () => {
+        await upload.verifyUploadedFile("sample.pdf");
+      });
     }
   );
 });

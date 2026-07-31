@@ -3,9 +3,14 @@ import { test } from "@fixtures/api.fixture";
 
 test(
   "DELETE - Delete Product",
-  { tag: ["@api", "@sanity", "@apiProduct", "@p2"] },
+  {
+    tag: ["@api", "@sanity", "@apiProduct", "@p2"],
+  },
   async ({ productService }) => {
-    const response = await productService.deleteProduct(1);
-    StatusAssertions.verify200(response);
+    await test.step("Delete the product", async () => {
+      const response = await productService.deleteProduct(1);
+
+      StatusAssertions.verifySuccess(response);
+    });
   }
 );

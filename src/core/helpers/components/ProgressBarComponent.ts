@@ -1,7 +1,7 @@
-import { BaseComponent } from "@core/helpers/components/BaseComponent";
+import { ComponentBase } from "@core/helpers/components/ComponentBase";
 import { expect, Locator, Page } from "@playwright/test";
 
-export class ProgressBarComponent extends BaseComponent {
+export class ProgressBarComponent extends ComponentBase {
   private static readonly DEFAULT_TIMEOUT = 30000;
 
   constructor(page: Page, locator: Locator) {
@@ -11,7 +11,7 @@ export class ProgressBarComponent extends BaseComponent {
   /**
    * Returns current progress percentage.
    */
-  async percentage(): Promise<number> {
+  async getPercentage(): Promise<number> {
     const value = await this.locator.getAttribute("aria-valuenow");
     return Number(value ?? 0);
   }
@@ -19,7 +19,7 @@ export class ProgressBarComponent extends BaseComponent {
   /**
    * Wait until progress reaches the expected percentage.
    */
-  async waitUntilPercentage(expected: number, timeout?: number): Promise<void> {
+  async waitUntilPercentage(expected: number, timeout?: number) {
     await expect
       .poll(
         async () => {
@@ -34,15 +34,15 @@ export class ProgressBarComponent extends BaseComponent {
   /**
    * Wait until progress completes.
    */
-  async waitUntilComplete(timeout = ProgressBarComponent.DEFAULT_TIMEOUT): Promise<void> {
+  async waitUntilComplete(timeout = ProgressBarComponent.DEFAULT_TIMEOUT) {
     await this.waitUntilPercentage(100, timeout);
   }
 
   /**
    * Verify progress percentage.
    */
-  async verifyPercentage(expected: number): Promise<void> {
-    const actual = await this.percentage();
+  async verifyPercentage(expected: number) {
+    const actual = await this.getPercentage();
 
     if (actual !== expected) {
       throw new Error(`Expected progress ${expected}% but found ${actual}%`);
@@ -53,6 +53,6 @@ export class ProgressBarComponent extends BaseComponent {
    * Returns true if completed.
    */
   async isCompleted(): Promise<boolean> {
-    return (await this.percentage()) === 100;
+    return (await this.getPercentage()) === 100;
   }
 }

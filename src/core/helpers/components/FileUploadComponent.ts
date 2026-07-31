@@ -1,7 +1,7 @@
-import { BaseComponent } from "@core/helpers/components/BaseComponent";
+import { ComponentBase } from "@core/helpers/components/ComponentBase";
 import { Locator, Page } from "@playwright/test";
 
-export class FileUploadComponent extends BaseComponent {
+export class FileUploadComponent extends ComponentBase {
   constructor(page: Page, locator: Locator) {
     super(page, locator);
   }
@@ -9,7 +9,7 @@ export class FileUploadComponent extends BaseComponent {
   /**
    * Upload single or multiple files.
    */
-  async upload(file: string | string[]): Promise<void> {
+  async upload(file: string | string[]) {
     await this.waits.visible(this.locator);
     await this.locator.setInputFiles(file);
   }
@@ -18,14 +18,14 @@ export class FileUploadComponent extends BaseComponent {
    * Upload multiple files.
    * Wrapper around upload() for readability.
    */
-  async uploadMultiple(files: string[]): Promise<void> {
+  async uploadMultiple(files: string[]) {
     await this.upload(files);
   }
 
   /**
    * Remove uploaded files.
    */
-  async clear(): Promise<void> {
+  async clear() {
     await this.waits.visible(this.locator);
     await this.locator.setInputFiles([]);
   }

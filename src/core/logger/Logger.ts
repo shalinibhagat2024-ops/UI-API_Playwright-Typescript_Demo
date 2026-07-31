@@ -24,7 +24,7 @@ export class Logger {
     }
 
     if (LoggerConfig.showEnvironment) {
-      parts.push(EnvironmentManager.getCurrentEnvironment());
+      parts.push(EnvironmentManager.getEnvironmentName());
     }
 
     parts.push(level);
@@ -36,7 +36,7 @@ export class Logger {
   /**
    * INFO
    */
-  public static async info(message: string): Promise<void> {
+  public static async info(message: string) {
     console.log(message);
     await allure.step(message, async () => {});
   }

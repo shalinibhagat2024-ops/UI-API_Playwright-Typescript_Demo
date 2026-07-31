@@ -2,6 +2,7 @@ import { ProductCreateRequest } from "@api/modules/products/models/ProductCreate
 import { ProductListResponse } from "@api/modules/products/models/ProductListResponse";
 import { ProductResponse } from "@api/modules/products/models/ProductResponse";
 import { StatusAssertions } from "@api/shared/assertions/StatusAssertions";
+import { HttpStatus } from "@api/shared/constants/HttpStatus";
 import { APIResponse } from "@playwright/test";
 import { CommonAssertions } from "src/api/shared/assertions/CommonAssertions";
 
@@ -37,7 +38,7 @@ export class ProductAssertions {
     request: ProductCreateRequest,
     product: ProductResponse
   ): void {
-    StatusAssertions.verify201(response);
+    StatusAssertions.verifyStatus(response, HttpStatus.CREATED);
 
     this.verifyProduct(product);
 
@@ -58,7 +59,7 @@ export class ProductAssertions {
     expectedTitle: string,
     expectedPrice: number
   ): void {
-    StatusAssertions.verify200(response);
+    StatusAssertions.verifySuccess(response);
 
     this.verifyProduct(product);
 
@@ -68,7 +69,7 @@ export class ProductAssertions {
   }
 
   static verifyDeletedProduct(response: APIResponse): void {
-    StatusAssertions.verify200(response);
+    StatusAssertions.verifySuccess(response);
   }
 
   // =====================================

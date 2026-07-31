@@ -8,12 +8,20 @@ import { test } from "@fixtures/api.fixture";
 
 test(
   "GET - Get User By Id",
-  { tag: ["@api", "@sanity", "@apiUser", "@p2"] },
+  {
+    tag: ["@api", "@sanity", "@apiUser", "@p2"],
+  },
   async ({ userService }) => {
-    const response = await userService.getUserById(1);
-    StatusAssertions.verify200(response);
-    const user = await ResponseUtil.json<UserResponse>(response);
-    SchemaAssertions.validate(Schemas.User, user);
-    UserAssertions.verifyUser(user);
+    await test.step("Retrieve user by ID", async () => {
+      const response = await userService.getUserById(1);
+
+      StatusAssertions.verifySuccess(response);
+
+      const user = await ResponseUtil.json<UserResponse>(response);
+
+      SchemaAssertions.validate(Schemas.User, user);
+
+      UserAssertions.verifyUser(user);
+    });
   }
 );

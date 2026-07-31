@@ -29,7 +29,7 @@ export class ResponseAssertions {
 
   //Verify Response Body Exists
 
-  static async verifyBodyNotEmpty(response: APIResponse): Promise<void> {
+  static async verifyBodyNotEmpty(response: APIResponse) {
     const body = await response.text();
 
     expect(body.length).toBeGreaterThan(0);
@@ -43,7 +43,7 @@ export class ResponseAssertions {
 
   // Verify JSON Response
 
-  static async verifyJson(response: APIResponse): Promise<void> {
+  static async verifyJson(response: APIResponse) {
     await expect(async () => {
       await response.json();
     }).not.toThrow();
@@ -51,7 +51,7 @@ export class ResponseAssertions {
 
   //Verify Empty Response
 
-  static async verifyEmptyBody(response: APIResponse): Promise<void> {
+  static async verifyEmptyBody(response: APIResponse) {
     const body = await response.text();
 
     expect(body).toBe("");

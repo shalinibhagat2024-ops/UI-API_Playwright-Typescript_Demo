@@ -11,10 +11,17 @@ test.describe("Table Component Showcase", () => {
     async ({ page }) => {
       const table = new TableShowcasePage(page);
 
-      await table.open();
+      await test.step("Open Table Showcase page", async () => {
+        await table.open();
+      });
 
-      expect(await table.employeeTable.rowCount()).toBeGreaterThan(0);
-      expect(await table.employeeTable.columnCount()).toBeGreaterThan(0);
+      await test.step("Verify the table contains one or more rows", async () => {
+        expect(await table.employeeTable.rowCount()).toBeGreaterThan(0);
+      });
+
+      await test.step("Verify the table contains one or more columns", async () => {
+        expect(await table.employeeTable.columnCount()).toBeGreaterThan(0);
+      });
     }
   );
 
@@ -26,9 +33,13 @@ test.describe("Table Component Showcase", () => {
     async ({ page }) => {
       const table = new TableShowcasePage(page);
 
-      await table.open();
+      await test.step("Open Table Showcase page", async () => {
+        await table.open();
+      });
 
-      expect(await table.employeeTable.containsRow("Cierra")).toBeTruthy();
+      await test.step("Verify the table contains employee 'Cierra'", async () => {
+        expect(await table.employeeTable.containsRow("Cierra")).toBeTruthy();
+      });
     }
   );
 });

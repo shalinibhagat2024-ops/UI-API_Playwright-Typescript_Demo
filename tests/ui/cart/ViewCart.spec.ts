@@ -2,21 +2,33 @@ import { CartAssertions } from "@core/assertions/CartAssertions";
 import { test } from "@fixtures/page.fixture";
 import { ProductFactory } from "src/testdata/factories/ProductFactory";
 
-test.describe("View Cart", () => {
+test.describe("Verify Total", () => {
   test(
-    "Verify Product Added Into Cart",
+    "Verify Product Total",
     {
-      tag: ["@ui", "@cart", "@smoke", "@regression"],
+      tag: ["@ui", "@cart", "@regression"],
     },
     async ({ pages }) => {
       const product = ProductFactory.blueTop();
-      await pages.automationExercise.home.open();
-      await pages.automationExercise.auth.products.open();
-      await pages.automationExercise.auth.products.addToCart(product);
-      await pages.automationExercise.auth.products.addToCart(product);
-      await pages.automationExercise.auth.products.viewCart();
-      await pages.automationExercise.auth.cart.verifyOpened();
-      CartAssertions.exists(await pages.automationExercise.auth.cart.containsProduct(product.name));
+
+      await test.step("Open application and navigate to Products", async () => {
+        await pages.automationExercise.home.open();
+        await pages.automationExercise.auth.products.open();
+      });
+
+      await test.step(`Add product "${product.name}" to cart`, async () => {
+        await pages.automationExercise.auth.products.addToCart(product);
+      });
+
+      await test.step("Open shopping cart", async () => {
+        await pages.automationExercise.auth.products.viewCart();
+      });
+
+      await test.step("Verify the product total", async () => {
+        const item = await pages.automationExercise.auth.cart.getProduct(product.name);
+
+        CartAssertions.total(item.total, item.price * item.quantity);
+      });
     }
   );
 });

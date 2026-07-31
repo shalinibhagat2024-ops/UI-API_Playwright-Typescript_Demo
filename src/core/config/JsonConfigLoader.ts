@@ -11,7 +11,6 @@ export class JsonConfigLoader {
       "environment",
       `${profile}.json`
     );
-
     if (!fs.existsSync(filePath)) {
       throw new Error(`Environment file not found: ${filePath}`);
     }

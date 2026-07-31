@@ -1,6 +1,6 @@
 import { Logger } from "@core/logger/Logger";
 
-async function globalTeardown(): Promise<void> {
+async function globalTeardown() {
   Logger.info("Stopping services...");
 
   // Stop mock server

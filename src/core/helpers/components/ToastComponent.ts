@@ -1,7 +1,7 @@
-import { BaseComponent } from "@core/helpers/components/BaseComponent";
+import { ComponentBase } from "@core/helpers/components/ComponentBase";
 import { Locator, Page } from "@playwright/test";
 
-export class ToastComponent extends BaseComponent {
+export class ToastComponent extends ComponentBase {
   private static readonly DEFAULT_TIMEOUT = 15_000;
 
   constructor(page: Page, locator: Locator) {
@@ -11,32 +11,60 @@ export class ToastComponent extends BaseComponent {
   /**
    * Wait until the toast is visible.
    */
-  async waitForToast(): Promise<void> {
+  async waitUntilVisible() {
     await this.waits.visible(this.locator, ToastComponent.DEFAULT_TIMEOUT);
   }
 
   /**
-   * Verify toast contains text.
+   * Wait until the toast disappears.
    */
-  async verifyContains(expected: string | RegExp): Promise<void> {
-    await this.waitForToast();
+  async waitUntilHidden() {
+    await this.waits.hidden(this.locator, ToastComponent.DEFAULT_TIMEOUT);
+  }
 
+  /**
+   * Verify the toast is visible.
+   */
+  async verifyVisible() {
+    await this.waitUntilVisible();
+    await this.assertions.visible(this.locator);
+  }
+
+  /**
+   * Verify the toast is hidden.
+   */
+  async verifyHidden() {
+    await this.waitUntilHidden();
+    await this.assertions.hidden(this.locator);
+  }
+
+  /**
+   * Verify the toast contains the expected message.
+   */
+  async verifyContains(expected: string | RegExp) {
+    await this.verifyVisible();
     await this.assertions.containsText(this.locator, expected);
   }
 
   /**
-   * Verify success toast.
-   * Wrapper around verifyContains() for readability.
+   * Verify a success toast.
    */
-  async verifySuccess(message: string | RegExp): Promise<void> {
+  async verifySuccess(message: string | RegExp) {
     await this.verifyContains(message);
   }
 
   /**
-   * Verify error toast.
-   * Wrapper around verifyContains() for readability.
+   * Verify an error toast.
    */
-  async verifyError(message: string | RegExp): Promise<void> {
+  async verifyError(message: string | RegExp) {
     await this.verifyContains(message);
+  }
+
+  /**
+   * Returns the toast message.
+   */
+  async getText(): Promise<string> {
+    await this.waitUntilVisible();
+    return this.getText();
   }
 }

@@ -1,92 +1,131 @@
-import { BaseComponent } from "@core/helpers/components/BaseComponent";
+import { ComponentBase } from "@core/helpers/components/ComponentBase";
 import { Locator, Page } from "@playwright/test";
 
-export class CalendarComponent extends BaseComponent {
+export class CalendarComponent extends ComponentBase {
   constructor(page: Page, locator: Locator) {
     super(page, locator);
   }
 
   /**
-   * Enter date into calendar input.
+   * Enter a date into the calendar.
    */
-  async enter(date: string): Promise<void> {
-    await this.actions.fill(this.locator, date);
+  async enter(date: string) {
+    await this.enterText(date);
   }
 
   /**
-   * Type date into calendar input.
+   * Type a date into the calendar.
    */
-  async type(date: string): Promise<void> {
-    await this.actions.type(this.locator, date);
+  async type(date: string) {
+    await this.typeText(date);
   }
 
   /**
-   * Clear selected date.
+   * Clear the selected date.
    */
-  async clear(): Promise<void> {
-    await this.actions.clear(this.locator);
+  async clear() {
+    await super.clear();
   }
 
   /**
-   * Open calendar.
+   * Open the calendar picker.
    */
-  async open(): Promise<void> {
+  async open() {
     await this.click();
   }
 
   /**
-   * Get selected date.
+   * Get the selected date.
    */
-  async value(): Promise<string> {
-    return await this.getValue();
+  async getValue(): Promise<string> {
+    return (await this.getAttribute("value")) ?? "";
   }
 
   /**
-   * Verify selected date.
+   * Get the placeholder text.
    */
-  async verifyValue(expected: string | RegExp): Promise<void> {
+  async getPlaceholder(): Promise<string> {
+    return (await this.getAttribute("placeholder")) ?? "";
+  }
+
+  /**
+   * Returns true if the calendar is read-only.
+   */
+  async isReadOnly(): Promise<boolean> {
+    return (await this.getAttribute("readonly")) !== null;
+  }
+
+  /**
+   * Returns true if the calendar is required.
+   */
+  async isRequired(): Promise<boolean> {
+    return (await this.getAttribute("required")) !== null;
+  }
+
+  /**
+   * Verify the selected date.
+   */
+  async verifyValue(expected: string | RegExp) {
     await this.assertions.value(this.locator, expected);
   }
 
   /**
-   * Verify calendar is editable.
+   * Verify the placeholder.
    */
-  async verifyEditable(): Promise<void> {
-    await this.assertions.editable(this.locator);
-  }
-
-  /**
-   * Verify calendar is empty.
-   */
-  async verifyEmpty(): Promise<void> {
-    await this.assertions.empty(this.locator);
-  }
-
-  /**
-   * Verify placeholder text.
-   */
-  async verifyPlaceholder(expected: string | RegExp): Promise<void> {
+  async verifyPlaceholder(expected: string | RegExp) {
     await this.assertions.attribute(this.locator, "placeholder", expected);
   }
 
   /**
-   * Get placeholder text.
+   * Verify the calendar is editable.
    */
-  async placeholder(): Promise<string | null> {
-    return await this.actions.getAttribute(this.locator, "placeholder");
+  async verifyEditable() {
+    await this.assertions.editable(this.locator);
   }
 
   /**
-   * Check if calendar is readonly.
+   * Verify the calendar is empty.
    */
-  async isReadOnly(): Promise<boolean> {
-    return (await this.actions.getAttribute(this.locator, "readonly")) !== null;
+  async verifyEmpty() {
+    await this.assertions.empty(this.locator);
   }
 
   /**
-   * Check if calendar is required.
+   * Verify the calendar is visible.
    */
-  async isRequired(): Promise<boolean> {
-    return (await this.actions.getAttribute(this.locator, "required")) !== null;
+  async verifyVisible() {
+    await this.assertions.visible(this.locator);
+  }
+
+  /**
+   * Verify the calendar is enabled.
+   */
+  async verifyEnabled() {
+    await this.assertions.enabled(this.locator);
+  }
+
+  /**
+   * Verify the calendar is disabled.
+   */
+  async verifyDisabled() {
+    await this.assertions.disabled(this.locator);
+  }
+
+  /**
+   * Verify the calendar is read-only.
+   */
+  async verifyReadOnly() {
+    if (!(await this.isReadOnly())) {
+      throw new Error("Expected calendar to be read-only.");
+    }
+  }
+
+  /**
+   * Verify the calendar is required.
+   */
+  async verifyRequired() {
+    if (!(await this.isRequired())) {
+      throw new Error("Expected calendar to be required.");
+    }
   }
 }

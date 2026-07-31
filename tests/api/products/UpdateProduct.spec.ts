@@ -8,16 +8,23 @@ import { test } from "@fixtures/api.fixture";
 
 test(
   "PUT - Update Product",
-  { tag: ["@api", "@sanity", "@apiProduct", "@p2"] },
+  {
+    tag: ["@api", "@sanity", "@apiProduct", "@p2"],
+  },
   async ({ productService }) => {
-    const response = await productService.updateProduct(1, {
-      title: "Updated Product",
+    await test.step("Update the product", async () => {
+      const response = await productService.updateProduct(1, {
+        title: "Updated Product",
+        price: 999,
+      });
 
-      price: 999,
+      StatusAssertions.verifySuccess(response);
+
+      const product = await ResponseUtil.json<ProductResponse>(response);
+
+      SchemaAssertions.validate(Schemas.Product, product);
+
+      ProductAssertions.verifyUpdatedProduct(response, product, "Updated Product", 999);
     });
-    StatusAssertions.verify200(response);
-    const product = await ResponseUtil.json<ProductResponse>(response);
-    SchemaAssertions.validate(Schemas.Product, product);
-    ProductAssertions.verifyUpdatedProduct(response, product, "Updated Product", 999);
   }
 );

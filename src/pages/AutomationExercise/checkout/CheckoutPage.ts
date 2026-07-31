@@ -1,60 +1,84 @@
-import { Locator, Page } from "@playwright/test";
-import { Logger } from "src/core/logger/Logger";
-import { BasePage } from "src/pages/AutomationExercise/basePage/BasePage";
+import { Logger } from "@core/logger/Logger";
+import { expect, Locator, Page } from "@playwright/test";
+
+import { BasePage } from "../basePage/BasePage";
 
 export class CheckoutPage extends BasePage {
+  // ==========================================================================
+  // Locators
+  // ==========================================================================
+
   private readonly lblAddressDetails: Locator;
   private readonly lblReviewOrder: Locator;
+  private readonly lblDeliveryAddress: Locator;
+  private readonly lblBillingAddress: Locator;
   private readonly txtComment: Locator;
   private readonly btnPlaceOrder: Locator;
-  private readonly cartRows: Locator = this.page.locator("#cart_info tbody tr");
+  private readonly cartRows: Locator;
 
   constructor(page: Page) {
     super(page);
+
     this.lblAddressDetails = page.getByText("Address Details");
     this.lblReviewOrder = page.getByText("Review Your Order");
+    this.lblDeliveryAddress = page.getByText("Your delivery address");
+    this.lblBillingAddress = page.getByText("Your billing address");
+
     this.txtComment = page.locator("textarea[name='message']");
     this.btnPlaceOrder = page.locator("a.check_out");
+
+    this.cartRows = page.locator("#cart_info_table tbody tr");
   }
 
   /**
-   * Verify Checkout Page
+   * Verifies Checkout page is displayed.
    */
-  public async verifyOpened() {
-    Logger.info("Verifying Checkout Page");
+  public async verifyOpened(): Promise<this> {
+    Logger.info("Verifying Checkout page.");
+
     await this.assertions.visible(this.lblAddressDetails);
     await this.assertions.visible(this.lblReviewOrder);
-  }
 
-  public async verifyDeliveryAddress(): Promise<void> {
-    await this.assertions.visible(this.page.getByText("Your delivery address"));
-  }
-
-  public async verifyBillingAddress(): Promise<void> {
-    await this.assertions.visible(this.page.getByText("Your billing address"));
-  }
-
-  public async verifyProducts(expectedProducts: number): Promise<void> {
-    const rows = this.page.locator("#cart_info_table tbody tr");
-    console.log("Total rows:", await rows.count());
-    for (let i = 0; i < (await rows.count()); i++) {
-      console.log(await rows.nth(i).innerText());
-    }
+    return this;
   }
 
   /**
-   * Enter Order Comment
+   * Verifies Delivery Address section.
    */
-  public async enterComment(comment: string): Promise<void> {
-    Logger.info("Entering Comment");
-    await this.ui.textbox(this.txtComment).enter(comment);
+  public async verifyDeliveryAddress() {
+    await this.assertions.visible(this.lblDeliveryAddress);
   }
 
   /**
-   * Place Order
+   * Verifies Billing Address section.
    */
-  public async placeOrder(): Promise<void> {
-    Logger.info("Place Order");
-    await this.ui.button(this.btnPlaceOrder).click();
+  public async verifyBillingAddress() {
+    await this.assertions.visible(this.lblBillingAddress);
+  }
+
+  /**
+   * Verifies number of products in the order.
+   */
+  public async verifyProducts(expectedProducts: number) {
+    await expect(this.cartRows).toHaveCount(expectedProducts);
+  }
+
+  /**
+   * Enters order comment.
+   */
+  public async enterComment(comment: string) {
+    Logger.info("Entering order comment.");
+
+    await this.enterText(comment, this.txtComment);
+  }
+
+  /**
+   * Places the order.
+   */
+  public async placeOrder() {
+    Logger.info("Placing order.");
+
+    await this.click(this.btnPlaceOrder);
+    await this.waits.networkIdle();
   }
 }

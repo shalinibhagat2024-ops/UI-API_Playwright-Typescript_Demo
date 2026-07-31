@@ -10,7 +10,7 @@ export class GridShowcasePage extends BasePage {
     super(page);
   }
 
-  async open(): Promise<void> {
-    await this.navigate(ApplicationRoutes.demoqa.baseUrl, ApplicationRoutes.demoqa.webTables);
+  async open() {
+    await this.navigate(ApplicationRoutes.agGrid.baseUrl, ApplicationRoutes.agGrid.grid);
   }
 }

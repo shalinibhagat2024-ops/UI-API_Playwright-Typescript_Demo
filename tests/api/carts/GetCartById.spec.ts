@@ -8,12 +8,20 @@ import { test } from "@fixtures/api.fixture";
 
 test(
   "GET - Get Cart By Id",
-  { tag: ["@api", "@smoke", "@regression", "@apiCart", "@p2"] },
+  {
+    tag: ["@api", "@smoke", "@regression", "@apiCart", "@p2"],
+  },
   async ({ cartService }) => {
-    const response = await cartService.getCartById(1);
-    StatusAssertions.verify200(response);
-    const cart = await ResponseUtil.json<CartResponse>(response);
-    SchemaAssertions.validate(Schemas.Cart, cart);
-    CartAssertions.verifyCart(cart);
+    await test.step("Retrieve cart by ID", async () => {
+      const response = await cartService.getCartById(1);
+
+      StatusAssertions.verifySuccess(response);
+
+      const cart = await ResponseUtil.json<CartResponse>(response);
+
+      SchemaAssertions.validate(Schemas.Cart, cart);
+
+      CartAssertions.verifyCart(cart);
+    });
   }
 );

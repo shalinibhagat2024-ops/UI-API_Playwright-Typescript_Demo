@@ -5,9 +5,10 @@ import { User } from "src/models/user";
 import { BasePage } from "../basePage/BasePage";
 
 export class SignupInformationPage extends BasePage {
-  //=========================================================
+  // ==========================================================================
   // Account Information
-  //=========================================================
+  // ==========================================================================
+
   private readonly radioMr: Locator;
   private readonly radioMrs: Locator;
   private readonly txtPassword: Locator;
@@ -17,9 +18,10 @@ export class SignupInformationPage extends BasePage {
   private readonly chkNewsletter: Locator;
   private readonly chkOffers: Locator;
 
-  //=========================================================
+  // ==========================================================================
   // Address Information
-  //=========================================================
+  // ==========================================================================
+
   private readonly txtFirstName: Locator;
   private readonly txtLastName: Locator;
   private readonly txtCompany: Locator;
@@ -34,6 +36,8 @@ export class SignupInformationPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
+
+    // Account Information
     this.radioMr = page.locator("#id_gender1");
     this.radioMrs = page.locator("#id_gender2");
     this.txtPassword = page.locator("[data-qa='password']");
@@ -42,6 +46,8 @@ export class SignupInformationPage extends BasePage {
     this.ddlYear = page.locator("[data-qa='years']");
     this.chkNewsletter = page.locator("#newsletter");
     this.chkOffers = page.locator("#optin");
+
+    // Address Information
     this.txtFirstName = page.locator("[data-qa='first_name']");
     this.txtLastName = page.locator("[data-qa='last_name']");
     this.txtCompany = page.locator("[data-qa='company']");
@@ -56,37 +62,49 @@ export class SignupInformationPage extends BasePage {
   }
 
   /**
-   * Complete Registration
+   * Completes user registration.
    */
-  public async register(user: User): Promise<void> {
-    Logger.info(`Registering user : ${user.email}`);
+  public async register(user: User) {
+    Logger.info(`Registering user: ${user.email}`);
 
-    if (user.title === "Mr") {
-      await this.ui.radio(this.radioMr).check();
-    } else {
-      await this.ui.radio(this.radioMrs).check();
-    }
+    await this.fillAccountInformation(user);
+    await this.fillAddressInformation(user);
 
-    await this.ui.textbox(this.txtPassword).enter(user.password);
-    await this.ui.dropdown(this.ddlDay).selectByValue(user.day!);
-    await this.ui.dropdown(this.ddlMonth).selectByValue(user.month!);
-    await this.ui.dropdown(this.ddlYear).selectByValue(user.year!);
-    await this.ui.dropdown(this.ddlCountry).selectByLabel(user.country!);
+    await this.click(this.btnCreateAccount);
+    await this.waits.networkIdle();
+  }
 
-    await this.ui.checkbox(this.chkNewsletter).check();
-    await this.ui.checkbox(this.chkOffers).check();
+  /**
+   * Fills the Account Information section.
+   */
+  private async fillAccountInformation(user: User) {
+    await this.check(user.title === "Mr" ? this.radioMr : this.radioMrs);
 
-    await this.ui.textbox(this.txtFirstName).enter(user.firstName!);
-    await this.ui.textbox(this.txtLastName).enter(user.lastName!);
-    await this.ui.textbox(this.txtCompany).enter(user.company!);
-    await this.ui.textbox(this.txtAddress1).enter(user.address1!);
-    await this.ui.textbox(this.txtAddress2).enter(user.address2!);
-    await this.ui.dropdown(this.ddlCountry).selectByLabel(user.country!);
-    await this.ui.textbox(this.txtState).enter(user.state!);
-    await this.ui.textbox(this.txtCity).enter(user.city!);
-    await this.ui.textbox(this.txtZipcode).enter(user.zipcode!);
-    await this.ui.textbox(this.txtMobile).enter(user.mobileNumber!);
+    await this.enterText(user.password, this.txtPassword);
 
-    await this.ui.button(this.btnCreateAccount).click();
+    await this.selectByValue(user.day!, this.ddlDay);
+    await this.selectByValue(user.month!, this.ddlMonth);
+    await this.selectByValue(user.year!, this.ddlYear);
+
+    await this.check(this.chkNewsletter);
+    await this.check(this.chkOffers);
+  }
+
+  /**
+   * Fills the Address Information section.
+   */
+  private async fillAddressInformation(user: User) {
+    await this.enterText(user.firstName!, this.txtFirstName);
+    await this.enterText(user.lastName!, this.txtLastName);
+    await this.enterText(user.company!, this.txtCompany);
+    await this.enterText(user.address1!, this.txtAddress1);
+    await this.enterText(user.address2!, this.txtAddress2);
+
+    await this.selectByLabel(user.country!, this.ddlCountry);
+
+    await this.enterText(user.state!, this.txtState);
+    await this.enterText(user.city!, this.txtCity);
+    await this.enterText(user.zipcode!, this.txtZipcode);
+    await this.enterText(user.mobileNumber!, this.txtMobile);
   }
 }

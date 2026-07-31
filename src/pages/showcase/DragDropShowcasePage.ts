@@ -7,7 +7,7 @@ export class DragDropShowcasePage extends BasePage {
 
   readonly dragDrop = this.ui.dragDrop(this.source);
 
-  async dragAtoB(): Promise<void> {
+  async dragAtoB() {
     await this.dragDrop.dragTo(this.target);
   }
 }

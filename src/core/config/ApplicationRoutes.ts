@@ -2,11 +2,7 @@ export const ApplicationRoutes = {
   demoqa: {
     baseUrl: "https://demoqa.com",
 
-    textBox: "/text-box",
-    checkBox: "/checkbox",
-    radioButton: "/radio-button",
     webTables: "/webtables",
-    buttons: "/buttons",
     links: "/links",
     uploadDownload: "/upload-download",
     dynamicProperties: "/dynamic-properties",

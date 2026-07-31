@@ -12,7 +12,7 @@ export class WaitHelper {
   /**
    * Wait until element is visible.
    */
-  async visible(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+  async visible(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT) {
     await locator.waitFor({
       state: "visible",
       timeout,
@@ -22,14 +22,14 @@ export class WaitHelper {
   /**
    * Backward compatible alias.
    */
-  async waitForVisible(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+  async waitForVisible(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT) {
     await this.visible(locator, timeout);
   }
 
   /**
    * Wait until element is hidden.
    */
-  async hidden(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+  async hidden(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT) {
     await locator.waitFor({
       state: "hidden",
       timeout,
@@ -39,14 +39,14 @@ export class WaitHelper {
   /**
    * Backward compatible alias.
    */
-  async waitForHidden(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+  async waitForHidden(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT) {
     await this.hidden(locator, timeout);
   }
 
   /**
    * Wait until element is attached.
    */
-  async attached(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+  async attached(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT) {
     await locator.waitFor({
       state: "attached",
       timeout,
@@ -56,7 +56,7 @@ export class WaitHelper {
   /**
    * Wait until element is detached.
    */
-  async detached(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+  async detached(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT) {
     await locator.waitFor({
       state: "detached",
       timeout,
@@ -66,7 +66,7 @@ export class WaitHelper {
   /**
    * Wait until element is enabled.
    */
-  async enabled(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+  async enabled(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT) {
     await expect(locator).toBeEnabled({
       timeout,
     });
@@ -75,7 +75,7 @@ export class WaitHelper {
   /**
    * Wait until element is disabled.
    */
-  async disabled(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+  async disabled(locator: Locator, timeout = WaitHelper.DEFAULT_TIMEOUT) {
     await expect(locator).toBeDisabled({
       timeout,
     });
@@ -88,21 +88,21 @@ export class WaitHelper {
   /**
    * Wait for page load.
    */
-  async pageLoad(): Promise<void> {
+  async pageLoad() {
     await this.page.waitForLoadState("load");
   }
 
   /**
    * Backward compatible alias.
    */
-  async waitForPageLoad(): Promise<void> {
+  async waitForPageLoad() {
     await this.pageLoad();
   }
 
   /**
    * Wait until DOM is loaded.
    */
-  async domLoaded(): Promise<void> {
+  async domLoaded() {
     await this.page.waitForLoadState("domcontentloaded");
   }
 
@@ -110,7 +110,7 @@ export class WaitHelper {
    * Wait until network becomes idle.
    * Falls back to 'load' if networkidle is never reached.
    */
-  async networkIdle(timeout = 10_000): Promise<void> {
+  async networkIdle(timeout = 10_000) {
     try {
       await this.page.waitForLoadState("networkidle", {
         timeout,
@@ -127,7 +127,7 @@ export class WaitHelper {
   /**
    * Wait for URL containing the specified value.
    */
-  async urlContains(value: string, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+  async urlContains(value: string, timeout = WaitHelper.DEFAULT_TIMEOUT) {
     await this.page.waitForURL(`**${value}**`, {
       timeout,
     });
@@ -136,7 +136,7 @@ export class WaitHelper {
   /**
    * Wait for exact URL or URL pattern.
    */
-  async url(url: string | RegExp, timeout = WaitHelper.DEFAULT_TIMEOUT): Promise<void> {
+  async url(url: string | RegExp, timeout = WaitHelper.DEFAULT_TIMEOUT) {
     await this.page.waitForURL(url, {
       timeout,
     });
@@ -149,14 +149,14 @@ export class WaitHelper {
   /**
    * Explicit wait.
    */
-  async wait(milliseconds: number): Promise<void> {
+  async wait(milliseconds: number) {
     await this.page.waitForTimeout(milliseconds);
   }
 
   /**
    * Backward compatible alias.
    */
-  async sleep(milliseconds: number): Promise<void> {
+  async sleep(milliseconds: number) {
     await this.wait(milliseconds);
   }
 }

@@ -1,6 +1,6 @@
 import { ReportInitializer } from "@core/reporting/ReportInitializer";
 
-async function globalSetup(): Promise<void> {
+async function globalSetup() {
   ReportInitializer.initialize();
 }
 export default globalSetup;

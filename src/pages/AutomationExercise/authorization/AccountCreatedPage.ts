@@ -8,21 +8,24 @@ export class AccountCreatedPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
+
     this.lblAccountCreatedSuccessMessage = page.locator("h2[data-qa='account-created']");
+
     this.btnContinue = page.locator("[data-qa='continue-button']");
   }
 
   /**
-   * Verify Account Created
+   * Verify Account Created successfully.
    */
-  public async verifyNewAccountCreated(): Promise<void> {
+  public async verifyNewAccountCreated() {
     await this.assertions.containsText(this.lblAccountCreatedSuccessMessage, "Account Created!");
   }
 
   /**
-   * Continue
+   * Click Continue button.
    */
-  public async continue(): Promise<void> {
-    await this.ui.button(this.btnContinue).click();
+  public async continue() {
+    await this.click(this.btnContinue);
+    await this.waits.networkIdle();
   }
 }

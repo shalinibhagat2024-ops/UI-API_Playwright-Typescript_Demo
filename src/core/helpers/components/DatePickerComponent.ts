@@ -1,12 +1,12 @@
-import { BaseComponent } from "@core/helpers/components/BaseComponent";
+import { ComponentBase } from "@core/helpers/components/ComponentBase";
 import { expect, Locator, Page } from "@playwright/test";
 
-export class DatePickerComponent extends BaseComponent {
+export class DatePickerComponent extends ComponentBase {
   constructor(page: Page, locator: Locator) {
     super(page, locator);
   }
 
-  async selectDate(year: string, month: string, day: string): Promise<void> {
+  async selectDate(year: string, month: string, day: string) {
     await this.locator.click();
 
     await this.page.locator(".react-datepicker__year-select").selectOption(year);
@@ -20,7 +20,7 @@ export class DatePickerComponent extends BaseComponent {
       .click();
   }
 
-  async verifyValue(expected: string): Promise<void> {
+  async verifyValue(expected: string) {
     await expect(this.locator).toHaveValue(expected);
   }
 }

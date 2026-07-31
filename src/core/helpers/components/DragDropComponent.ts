@@ -1,7 +1,7 @@
-import { BaseComponent } from "@core/helpers/components/BaseComponent";
+import { ComponentBase } from "@core/helpers/components/ComponentBase";
 import { Locator, Page } from "@playwright/test";
 
-export class DragDropComponent extends BaseComponent {
+export class DragDropComponent extends ComponentBase {
   constructor(page: Page, locator: Locator) {
     super(page, locator);
   }
@@ -9,14 +9,14 @@ export class DragDropComponent extends BaseComponent {
   /**
    * Drag current element to target element.
    */
-  async dragTo(target: Locator): Promise<void> {
+  async dragTo(target: Locator) {
     await this.locator.dragTo(target);
   }
 
   /**
    * Drag current element by mouse offset.
    */
-  async dragByOffset(x: number, y: number): Promise<void> {
+  async dragByOffset(x: number, y: number) {
     const box = await this.locator.boundingBox();
 
     if (!box) {
@@ -35,7 +35,7 @@ export class DragDropComponent extends BaseComponent {
   /**
    * Drag using custom target coordinates.
    */
-  async dragToPosition(x: number, y: number): Promise<void> {
+  async dragToPosition(x: number, y: number) {
     const box = await this.locator.boundingBox();
 
     if (!box) {
@@ -61,7 +61,7 @@ export class DragDropComponent extends BaseComponent {
   /**
    * Verify element is visible.
    */
-  async verifyVisible(): Promise<void> {
+  async verifyVisible() {
     await this.assertions.visible(this.locator);
   }
 }

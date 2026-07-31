@@ -8,29 +8,35 @@ import { test } from "@fixtures/api.fixture";
 
 test(
   "Workflow - Authenticate User",
-  { tag: ["@api", "@sanity", "@apiChainWorkflow", "@p1"] },
+  {
+    tag: ["@api", "@sanity", "@apiChainWorkflow", "@p1"],
+  },
   async ({ authService }) => {
-    /*
-     Step 1 - Login
-    */
+    let login: LoginResponse;
+    let currentUser: CurrentUserResponse;
 
-    const loginRequest = AuthBuilder.defaultLogin();
-    const loginResponse = await authService.login(loginRequest);
-    StatusAssertions.verify200(loginResponse);
-    const login = await ResponseUtil.json<LoginResponse>(loginResponse);
-    AuthAssertions.verifyLogin(loginResponse, login);
+    await test.step("Authenticate user", async () => {
+      const loginRequest = AuthBuilder.defaultLogin();
 
-    /*
-      Step 2 - Get Current User
-    */
+      const loginResponse = await authService.login(loginRequest);
 
-    const currentUserResponse = await authService.getCurrentUser(login.accessToken);
-    StatusAssertions.verify200(currentUserResponse);
-    const currentUser = await ResponseUtil.json<CurrentUserResponse>(currentUserResponse);
+      StatusAssertions.verifySuccess(loginResponse);
 
-    /*
-     Step 3 - Validate Workflow
-    */
-    AuthAssertions.verifyAuthenticatedUser(login, currentUser);
+      login = await ResponseUtil.json<LoginResponse>(loginResponse);
+
+      AuthAssertions.verifyLogin(loginResponse, login);
+    });
+
+    await test.step("Retrieve current user details", async () => {
+      const currentUserResponse = await authService.getCurrentUser(login.accessToken);
+
+      StatusAssertions.verifySuccess(currentUserResponse);
+
+      currentUser = await ResponseUtil.json<CurrentUserResponse>(currentUserResponse);
+    });
+
+    await test.step("Verify authenticated user details", async () => {
+      AuthAssertions.verifyAuthenticatedUser(login, currentUser);
+    });
   }
 );

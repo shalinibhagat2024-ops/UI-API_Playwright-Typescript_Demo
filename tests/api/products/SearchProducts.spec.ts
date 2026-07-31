@@ -6,12 +6,18 @@ import { test } from "@fixtures/api.fixture";
 
 test(
   "Search Product",
-  { tag: ["@api", "@sanity", "@apiProduct", "@p2"] },
+  {
+    tag: ["@api", "@sanity", "@apiProduct", "@p2"],
+  },
   async ({ productService }) => {
-    const response = await productService.searchProducts("phone");
-    const products = await ResponseUtil.json<ProductListResponse>(response);
-    StatusAssertions.verify200(response);
-    ProductAssertions;
-    const productCount = ProductAssertions.verifyProductList(products);
+    await test.step('Search products using keyword "phone"', async () => {
+      const response = await productService.searchProducts("phone");
+
+      StatusAssertions.verifySuccess(response);
+
+      const products = await ResponseUtil.json<ProductListResponse>(response);
+
+      ProductAssertions.verifyProductList(products);
+    });
   }
 );

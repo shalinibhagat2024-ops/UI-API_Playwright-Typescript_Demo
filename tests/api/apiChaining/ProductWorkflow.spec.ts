@@ -2,43 +2,53 @@ import { ProductAssertions } from "@api/modules/products/assertions/ProductAsser
 import { ProductBuilder } from "@api/modules/products/builders/ProductBuilder";
 import { ProductResponse } from "@api/modules/products/models/ProductResponse";
 import { StatusAssertions } from "@api/shared/assertions/StatusAssertions";
+import { HttpStatus } from "@api/shared/constants/HttpStatus";
 import { ResponseUtil } from "@api/shared/utils/ResponseUtil";
 import { test } from "@fixtures/api.fixture";
 
 test(
   "E2E Product Workflow",
-  { tag: ["@api", "@sanity", "@apiChainWorkflow", "@p1"] },
+  {
+    tag: ["@api", "@sanity", "@apiChainWorkflow", "@p1"],
+  },
   async ({ productService }) => {
-    // Step 1
+    let createdProduct: ProductResponse;
+    let updatedProduct: ProductResponse;
 
-    const productRequest = ProductBuilder.create()
+    const productRequest = ProductBuilder.create().build();
 
-      .build();
+    await test.step("Create a new product", async () => {
+      const createResponse = await productService.addProduct(productRequest);
 
-    // Step 2
+      StatusAssertions.verifyStatus(createResponse, HttpStatus.CREATED);
 
-    const createResponse = await productService.addProduct(productRequest);
-    StatusAssertions.verify201(createResponse);
+      createdProduct = await ResponseUtil.json<ProductResponse>(createResponse);
 
-    const createdProduct = await ResponseUtil.json<ProductResponse>(createResponse);
-
-    ProductAssertions.verifyCreatedProduct(createResponse, productRequest, createdProduct);
-
-    // Step 2 - Update an existing product
-    const updateResponse = await productService.updateProduct(1, {
-      title: "Updated Product",
-      price: 999,
+      ProductAssertions.verifyCreatedProduct(createResponse, productRequest, createdProduct);
     });
 
-    StatusAssertions.verify200(updateResponse);
+    await test.step("Update the existing product", async () => {
+      const updateResponse = await productService.updateProduct(1, {
+        title: "Updated Product",
+        price: 999,
+      });
 
-    const updatedProduct = await ResponseUtil.json<ProductResponse>(updateResponse);
+      StatusAssertions.verifySuccess(updateResponse);
 
-    ProductAssertions.verifyUpdatedProduct(updateResponse, updatedProduct, "Updated Product", 999);
+      updatedProduct = await ResponseUtil.json<ProductResponse>(updateResponse);
 
-    // Step 3 - Delete the same existing product
-    const deleteResponse = await productService.deleteProduct(1);
+      ProductAssertions.verifyUpdatedProduct(
+        updateResponse,
+        updatedProduct,
+        "Updated Product",
+        999
+      );
+    });
 
-    StatusAssertions.verify200(deleteResponse);
+    await test.step("Delete the existing product", async () => {
+      const deleteResponse = await productService.deleteProduct(1);
+
+      StatusAssertions.verifySuccess(deleteResponse);
+    });
   }
 );
