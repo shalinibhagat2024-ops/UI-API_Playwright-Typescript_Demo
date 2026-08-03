@@ -1,7 +1,7 @@
 import { BusinessComponentBase } from "@core/helpers/components/automationexercise/BusinessComponentBase";
 import { Logger } from "@core/logger/Logger";
+import { Product } from "@model/products/Product";
 import { Locator, Page } from "@playwright/test";
-import { Product } from "src/models/Product";
 import { ProductBuilder } from "src/testdata/builders/ProductBuilder";
 
 export class ProductInformationComponent extends BusinessComponentBase {

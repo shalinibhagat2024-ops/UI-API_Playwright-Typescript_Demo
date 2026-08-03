@@ -1,4 +1,4 @@
-import { Payment } from "src/models/Payment";
+import { Payment } from "@model/payments/Payment";
 import { PaymentBuilder } from "src/testdata/builders/PaymentBuilder";
 import { RandomUtil } from "src/utils/random/RandomUtil";
 

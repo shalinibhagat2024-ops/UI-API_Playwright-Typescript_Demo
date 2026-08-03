@@ -1,4 +1,4 @@
-import { Payment } from "src/models/Payment";
+import { Payment } from "@model/payments/Payment";
 
 export class PaymentBuilder {
   private readonly payment: Payment = {

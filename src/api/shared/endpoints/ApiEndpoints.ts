@@ -25,4 +25,13 @@ export const ApiEndpoints = {
     ADD: "/carts/add",
     BY_ID: (id: number) => `/carts/${id}`,
   },
+
+  POSTS: {
+    ALL: "/posts",
+    ADD: "/posts/add",
+    SEARCH: "/posts/search",
+    BY_ID: (id: number) => `/posts/${id}`,
+    USER: (userId: number) => `/posts/user/${userId}`,
+    TAG: (tag: string) => `/posts/tag/${tag}`,
+  },
 };

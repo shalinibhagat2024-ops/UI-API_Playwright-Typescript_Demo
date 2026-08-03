@@ -29,12 +29,3 @@ export class JsonUtil {
     return JSON.parse(json) as T;
   }
 }
-
-/*
-USAGE
-const config = JsonUtil.read<User>("user.json");
-
-JsonUtil.write("result.json", response);
-
-const json = JsonUtil.stringify(response);
-*/

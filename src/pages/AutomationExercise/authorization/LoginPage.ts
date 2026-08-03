@@ -13,6 +13,7 @@ export class LoginPage extends BasePage {
   private readonly txtLoginEmail: Locator;
   private readonly txtLoginPassword: Locator;
   private readonly btnLogin: Locator;
+  private readonly lblLoginError: Locator;
 
   // ==========================================================================
   // Signup
@@ -35,6 +36,7 @@ export class LoginPage extends BasePage {
     this.txtLoginEmail = page.locator("[data-qa='login-email']");
     this.txtLoginPassword = page.locator("[data-qa='login-password']");
     this.btnLogin = page.locator("[data-qa='login-button']");
+    this.lblLoginError = page.getByText("Your email or password is incorrect!");
 
     // Signup
     this.txtSignupName = page.locator("[data-qa='signup-name']");
@@ -119,5 +121,26 @@ export class LoginPage extends BasePage {
     Logger.info("Login page detected. Performing login.");
 
     await this.login(username, password);
+  }
+  public async verifyLoginError(): Promise<void> {
+    await this.assertions.visible(this.lblLoginError);
+  }
+  /**
+   * Verify browser validation message is displayed.
+   */
+  public async verifyValidationMessage(): Promise<this> {
+    Logger.info("Verifying browser validation message.");
+
+    const validationMessage = await this.txtLoginEmail.evaluate(
+      (element: HTMLInputElement) => element.validationMessage
+    );
+
+    if (!validationMessage || validationMessage.trim().length === 0) {
+      throw new Error("Expected browser validation message was not displayed.");
+    }
+
+    Logger.info(`Validation Message: ${validationMessage}`);
+
+    return this;
   }
 }

@@ -1,6 +1,5 @@
 import { test } from "@playwright/test";
-
-import { ModalShowcasePage } from "../../src/pages/showcase/ModalShowcasePage";
+import { ModalShowcasePage } from "src/pages/Components/ModalShowcasePage";
 
 test.describe("Modal Component", () => {
   test.skip(

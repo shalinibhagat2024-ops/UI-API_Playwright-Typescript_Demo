@@ -27,13 +27,6 @@ export class EnvironmentManager {
     this.configuration = JsonConfigLoader.load(this.profile);
 
     this.validate();
-
-    console.log("=================================");
-    console.log(`Environment : ${this.environment}`);
-    console.log(`Profile     : ${this.profile}`);
-    console.log(`Base URL    : ${this.configuration.baseUrl}`);
-    console.log(`API URL     : ${this.configuration.apiBaseUrl}`);
-    console.log("=================================");
   }
 
   /**

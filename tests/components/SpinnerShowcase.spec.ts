@@ -1,6 +1,6 @@
 import { ApplicationRoutes } from "@core/config/ApplicationRoutes";
 import { test } from "@playwright/test";
-import { SpinnerShowcasePage } from "src/pages/showcase/SpinnerShowcasePage";
+import { SpinnerShowcasePage } from "src/pages/Components/SpinnerShowcasePage";
 
 test.describe("Spinner Component Showcase", () => {
   test.skip(

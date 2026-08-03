@@ -18,4 +18,8 @@ export class RandomDataUtil {
   static lastName(): string {
     return `Doe${this.number()}`;
   }
+
+  public static postTitle(): string {
+    return `SamplePost${this.number()}`;
+  }
 }

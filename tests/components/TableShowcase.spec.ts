@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { TableShowcasePage } from "../../src/pages/showcase/TableShowcasePage";
+import { TableShowcasePage } from "../../src/pages/Components/TableShowcasePage";
 
 test.describe("Table Component Showcase", () => {
   test.skip(

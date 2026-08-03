@@ -1,5 +1,5 @@
 import { test } from "@playwright/test";
-import { ProductsPage } from "src/pages/showcase/ProductsPage";
+import { ProductsPage } from "src/pages/Components/ProductsPage";
 
 test.describe("Product Card", () => {
   test.skip(

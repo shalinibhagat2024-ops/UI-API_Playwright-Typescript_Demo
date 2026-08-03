@@ -93,4 +93,8 @@ export class HomePage extends BasePage {
 
     return this;
   }
+
+  public async verifyUserLoggedIn() {
+    await this.assertions.visible(this.page.getByText("Logged in as"));
+  }
 }

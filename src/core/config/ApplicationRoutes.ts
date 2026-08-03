@@ -15,6 +15,7 @@ export const ApplicationRoutes = {
     datePicker: "/date-picker",
     modalDialogs: "/modal-dialogs",
     alerts: "/alertsWindows",
+    textBox: "/text-box",
   },
 
   internet: {

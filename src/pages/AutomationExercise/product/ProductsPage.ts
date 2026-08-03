@@ -5,8 +5,8 @@ import { CategoryComponent } from "@core/helpers/components/automationexercise/C
 import { ProductGridComponent } from "@core/helpers/components/automationexercise/ProductGridComponent";
 import { SearchComponent } from "@core/helpers/components/automationexercise/SearchComponent";
 import { Logger } from "@core/logger/Logger";
+import { Product } from "@model/products/Product";
 import { Locator, Page } from "@playwright/test";
-import { Product } from "src/models/Product";
 
 import { ApplicationRoutes } from "../../../core/config/ApplicationRoutes";
 import { BasePage } from "../basePage/BasePage";

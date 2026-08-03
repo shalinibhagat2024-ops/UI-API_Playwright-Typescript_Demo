@@ -2,7 +2,7 @@ import { EnvironmentManager } from "@core/config/EnvironmentManager";
 import { TestDataSource } from "@core/constants/TestDataSource";
 import { CsvReader } from "@core/helpers/dataReaders/CsvReader";
 import { JsonReader } from "@core/helpers/dataReaders/JsonReader";
-import { User } from "src/models/user";
+import { User } from "@model/users/user";
 
 import { UserFactory } from "../factories/UserFactory";
 

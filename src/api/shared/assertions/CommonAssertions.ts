@@ -45,4 +45,20 @@ export class CommonAssertions {
     expect(value).toBeDefined();
     expect(value).not.toBeNull();
   }
+
+  static verifyArray(actual: readonly unknown[], expected: readonly unknown[]): void {
+    expect(actual).toEqual(expected);
+  }
+
+  static verifyLength(actual: unknown[], expected: number): void {
+    expect(actual.length).toBe(expected);
+  }
+
+  static verifyEmpty<T>(items: T[]): void {
+    expect(items.length).toBe(0);
+  }
+
+  static verifyLessThan(actual: number, expected: number): void {
+    expect(actual).toBeLessThan(expected);
+  }
 }

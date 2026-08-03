@@ -13,19 +13,14 @@ export class ProductAssertions {
 
   static verifyProduct(product: ProductResponse): void {
     CommonAssertions.verifyId(product.id);
-
     CommonAssertions.verifyNotEmpty(product.title);
-
     CommonAssertions.verifyGreaterThan(product.price, 0);
-
     CommonAssertions.verifyGreaterThanOrEqual(product.stock, 0);
   }
 
   static verifyProductList(products: ProductListResponse): void {
     CommonAssertions.verifyArrayNotEmpty(products.products);
-
     CommonAssertions.verifyGreaterThan(products.total, 0);
-
     CommonAssertions.verifyGreaterThan(products.limit, 0);
   }
 
@@ -39,13 +34,9 @@ export class ProductAssertions {
     product: ProductResponse
   ): void {
     StatusAssertions.verifyStatus(response, HttpStatus.CREATED);
-
     this.verifyProduct(product);
-
     CommonAssertions.verifyString(product.title, request.title);
-
     CommonAssertions.verifyString(product.description, request.description);
-
     CommonAssertions.verifyNumber(product.price, request.price);
 
     CommonAssertions.verifyString(product.category, request.category);

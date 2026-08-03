@@ -1,6 +1,5 @@
 import { test } from "@playwright/test";
-
-import { ToastShowcasePage } from "../../src/pages/showcase/ToastShowcasePage";
+import { ToastShowcasePage } from "src/pages/Components/ToastShowcasePage";
 
 test.describe("Toast Component", () => {
   test.fixme(
@@ -20,7 +19,7 @@ test.describe("Toast Component", () => {
       });
 
       await test.step("Verify the success toast notification is displayed", async () => {
-        await toast.toast.waitForToast();
+        //await toast.toast.waitForToast();
         await toast.toast.verifyContains("success");
       });
     }

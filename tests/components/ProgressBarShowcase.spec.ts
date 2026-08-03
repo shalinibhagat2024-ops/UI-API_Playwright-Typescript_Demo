@@ -1,6 +1,6 @@
 import { ApplicationRoutes } from "@core/config/ApplicationRoutes";
 import { test } from "@playwright/test";
-import { ProgressBarShowcasePage } from "src/pages/showcase/ProgressBarShowcasePage";
+import { ProgressBarShowcasePage } from "src/pages/Components/ProgressBarShowcasePage";
 
 test.describe("Progress Bar Component", () => {
   test.skip(

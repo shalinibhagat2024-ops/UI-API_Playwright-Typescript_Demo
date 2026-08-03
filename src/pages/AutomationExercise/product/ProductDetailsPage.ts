@@ -1,7 +1,7 @@
 import { ProductInformationComponent } from "@core/helpers/components/automationexercise/ProductInformationComponent";
 import { Logger } from "@core/logger/Logger";
+import { Product } from "@model/products/Product";
 import { Page } from "@playwright/test";
-import { Product } from "src/models/Product";
 
 import { BasePage } from "../basePage/BasePage";
 

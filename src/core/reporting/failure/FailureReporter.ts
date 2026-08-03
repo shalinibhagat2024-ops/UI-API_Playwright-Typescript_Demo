@@ -6,14 +6,5 @@ export class FailureReporter {
     if (testInfo.status === testInfo.expectedStatus) {
       return;
     }
-
-    // Reserved for future custom failure reporting.
-    // Example:
-    // - Browser console logs
-    // - Network logs
-    // - Application logs
-    // - Slack / Teams notifications
-    // - Database snapshots
-    // - Custom diagnostics
   }
 }

@@ -1,0 +1,26 @@
+[
+  {
+    "testCase": "Valid Login",
+    "email": "automationexercise@gmail.com",
+    "password": "Password123",
+    "expectedResult": "success"
+  },
+  {
+    "testCase": "Invalid Password",
+    "email": "validuser@test.com",
+    "password": "WrongPassword",
+    "expectedResult": "failure"
+  },
+  {
+    "testCase": "Invalid Email",
+    "email": "wrong@test.com",
+    "password": "Password123",
+    "expectedResult": "failure"
+  },
+  {
+    "testCase": "Empty Credentials",
+    "email": "",
+    "password": "",
+    "expectedResult": "validation"
+  }
+]

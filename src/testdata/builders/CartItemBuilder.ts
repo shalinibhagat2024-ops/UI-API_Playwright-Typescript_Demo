@@ -1,4 +1,4 @@
-import { CartItem } from "src/models/CartItem";
+import { CartItem } from "@model/cart/CartItem";
 
 export class CartItemBuilder {
   private readonly item: CartItem = {

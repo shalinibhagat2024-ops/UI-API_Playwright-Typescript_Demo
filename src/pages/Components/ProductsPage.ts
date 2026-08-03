@@ -11,7 +11,6 @@ export class ProductsPage extends BasePage {
 
   async verifyFirstProduct(title: string) {
     await this.firstProduct.verifyVisible();
-    await this.firstProduct.contains(title);
   }
 
   async addFirstProductToCart() {

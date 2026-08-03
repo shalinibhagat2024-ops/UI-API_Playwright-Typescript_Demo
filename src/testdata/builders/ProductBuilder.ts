@@ -1,4 +1,4 @@
-import { Product } from "src/models/Product";
+import { Product } from "@model/products/Product";
 
 export class ProductBuilder {
   private readonly product: Product = {

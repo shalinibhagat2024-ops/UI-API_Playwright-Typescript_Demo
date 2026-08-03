@@ -1,6 +1,5 @@
 import { test } from "@playwright/test";
-
-import { InputControlsShowcasePage } from "../../src/pages/showcase/InputControlsShowcasePage";
+import { InputControlsShowcasePage } from "src/pages/Components/InputControlsShowcasePage";
 
 test.describe("Input Controls Showcase", () => {
   test.skip(

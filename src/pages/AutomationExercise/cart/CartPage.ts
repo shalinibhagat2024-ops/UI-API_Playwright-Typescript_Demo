@@ -1,6 +1,6 @@
 import { Logger } from "@core/logger/Logger";
+import { CartItem } from "@model/cart/CartItem";
 import { expect, Locator, Page } from "@playwright/test";
-import { CartItem } from "src/models/CartItem";
 
 import { BasePage } from "../basePage/BasePage";
 

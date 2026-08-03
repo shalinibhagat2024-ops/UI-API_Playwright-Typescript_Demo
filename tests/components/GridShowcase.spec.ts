@@ -1,6 +1,5 @@
 import { expect, test } from "@playwright/test";
-
-import { GridShowcasePage } from "../../src/pages/showcase/GridShowcasePage";
+import { GridShowcasePage } from "src/pages/Components/GridShowcasePage";
 
 test.describe("Grid Component Showcase", () => {
   test.skip(

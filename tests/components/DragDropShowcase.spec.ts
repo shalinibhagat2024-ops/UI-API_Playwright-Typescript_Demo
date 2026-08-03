@@ -1,6 +1,6 @@
 import { ApplicationRoutes } from "@core/config/ApplicationRoutes";
 import { expect, test } from "@playwright/test";
-import { DragDropShowcasePage } from "src/pages/showcase/DragDropShowcasePage";
+import { DragDropShowcasePage } from "src/pages/Components/DragDropShowcasePage";
 
 test.describe("DragDrop Component", () => {
   test.skip(
